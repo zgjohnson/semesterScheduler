@@ -1,0 +1,12 @@
+
+{% extends "base.html" %}
+Catalog
+{% block content %}
+<ul>
+{% for course in courses %}
+    <a href="{% url 'viewCourse' course.id %}">
+    <li>{{ courseourse.department_ID }} {{ courseourse.course_Number }} {{ course.course_Title }}</li>
+    </a>
+{% endfor %}
+</ul>
+{% endblock %}

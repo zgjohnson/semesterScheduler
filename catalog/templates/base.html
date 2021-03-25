@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Wossamotta University</title>
+        <meta charset="utf-8"/>
+        <meta name="description" content=""/>
+        <meta name="author" content=""/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> icons-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    </head>
+<body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+   <nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">Wossamotta University</a> <!-- refreshes the page or goes to the top -->
+    </div>
+   {% if user.is_authenticated %}
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#">Home</a></li> <!--might take this out it seems redundant// should reference login, or catelog page-->
+      <li><a href="{% url 'homePage' %}">Catalog</a></li>
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Scheduler
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="#">Possible Courses</a></li>
+          <li><a href="#">Reserved Times</a></li>
+          <li><a href="#">Schedule Generator</a></li>
+          <li><a href="#">Saved Schedules</a></li>
+        </ul>
+      </li>
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="#"><span class="glyphicon glyphicon-user"></span>Sign Up</a></li>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-log-in"></span>Account</a> <!--could do person icon here-->
+      <ul class="dropdown-menu">
+          <li><a href="#"></a>My Account</li> <!--might take out-->
+          <li><a href="{% url 'auth_logout' %}">Logout</a></li>
+      </ul>
+      </li>
+    </ul>
+   {% endif %}
+  </div>
+</nav>
+
+
+
+
+
+    {% block content %}{% endblock %}
+<footer>
+  <p>Wossamotta University<br>
+  <a href="#">Contact Us</a></p>
+</footer>
+</body>
+</html>
