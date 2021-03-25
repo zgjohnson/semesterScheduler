@@ -123,8 +123,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 SITE_ID = 1
-LOGIN_URL = 'account/login'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = 'accounts/login'
+LOGIN_REDIRECT_URL = 'home/'
 ACCOUNT_ACTIVATION_DAYS = 7
 
 TIME_INPUT_FORMATS = ('%I:%M %p',)

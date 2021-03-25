@@ -9,7 +9,9 @@
 
         <li>{{ section.section_ID }} {{ section.instructor }} </li>
         <ol>
-            <li>{{ section.periods.values_list}}</li>
+            {% for period in section.periods.all %}
+            <li>{{ period }}</li>
+            {% endfor %}
         </ol>
 
     {% endif %}

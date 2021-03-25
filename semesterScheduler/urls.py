@@ -24,7 +24,8 @@ urlpatterns = [
     path('accounts/register/', MyRegistrationView.as_view()),
     path('accounts/', include('registration.backends.default.urls')),
 
-    path('home/', views.homePage, name='homePage'),
+    #Catalog pages
+    path('', views.homePage, name='homePage'),
     path('schedule/', views.schedulePage, name='schedulePage'),
     path('course/<int:course_pk>', views.viewCourse, name='viewCourse')
 

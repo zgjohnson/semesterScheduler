@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404
 from registration.backends.default.views import RegistrationView
 
-
+from django.contrib.auth.models import Group
 from .forms import MyRegistrationForm
 from django.contrib.auth.hashers import make_password
 from registration.models import RegistrationManager
@@ -21,6 +21,8 @@ class MyRegistrationView(RegistrationView):
 
         if data['access_requested'] == 'A':
             user.is_staff = True
+            staff_group = Group.objects.get(name='Staff')
+            staff_group.user_set.add(user)
 
         elif data['access_requested'] == 'R':
             user.is_staff = True
