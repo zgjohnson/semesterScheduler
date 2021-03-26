@@ -9,7 +9,6 @@ from django.contrib.auth.hashers import make_password
 from registration.models import RegistrationManager
 from registration.models import RegistrationProfile
 from registration.models import send_email
-
 from .models import Course, Section
 
 
@@ -33,8 +32,12 @@ class MyRegistrationView(RegistrationView):
 
 @login_required
 def homePage(request):
+    courses = Course.objects.all()
     if request.method == 'GET':
-        courses = Course.objects.all()
+        return render(request, 'homePage.html', {'courses': courses})
+
+    elif request.method == 'POST':
+
         return render(request, 'homePage.html', {'courses': courses})
 
 

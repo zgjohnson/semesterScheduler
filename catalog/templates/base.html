@@ -19,6 +19,7 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="#">Wossamotta University</a> <!-- refreshes the page or goes to the top -->
     </div>
+
    {% if user.is_authenticated %}
     <ul class="nav navbar-nav">
       <li class="active"><a href="#">Home</a></li> <!--might take this out it seems redundant// should reference login, or catelog page-->
@@ -40,10 +41,12 @@
         <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-log-in"></span>Account</a> <!--could do person icon here-->
       <ul class="dropdown-menu">
           <li><a href="#"></a>My Account</li> <!--might take out-->
+
           <li><a href="{% url 'auth_logout' %}">Logout</a></li>
       </ul>
       </li>
     </ul>
+
    {% endif %}
   </div>
 </nav>

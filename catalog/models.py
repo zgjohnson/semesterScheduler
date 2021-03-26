@@ -53,3 +53,11 @@ class Section(models.Model):
 
     def __str__(self):
         return self.section_ID
+
+#class DesignatedCourses(models.Model):
+    #Dictionary to hold the Courses the key being the Course ID and the value being the Course
+    #I think this would be the best holder for our Course obects. We could also use a set
+    #A set would not let any repeat which is good but it would also not keep them ordered.
+    #I am not sure yet if they need to be ordered for what we need.
+    #designated_Courses = {}
+    #This model will need to reference a specific user so there needs to be a foreign key referencing a user.
