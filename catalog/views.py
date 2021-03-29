@@ -9,8 +9,8 @@ from django.contrib.auth.hashers import make_password
 from registration.models import RegistrationManager
 from registration.models import RegistrationProfile
 from registration.models import send_email
-
-from .models import Course, Section
+from .models import Course, Section, DesignatedCourses
+from .forms import DesignatedCoursesForm
 
 
 class MyRegistrationView(RegistrationView):
@@ -33,8 +33,26 @@ class MyRegistrationView(RegistrationView):
 
 @login_required
 def homePage(request):
+    courses = Course.objects.all()
+    current_user = request.user
+
+    dc = DesignatedCourses(user=current_user)
+    if dc.DoesNotExist:
+        dc.save()
     if request.method == 'GET':
-        courses = Course.objects.all()
+
+        return render(request, 'homePage.html', {'courses': courses})
+
+    else:
+
+        form = DesignatedCoursesForm(request.POST)
+        if form.is_valid():
+            for item in form.cleaned_data['choices']:
+                print(item)
+
+                dc.designated_courses.add(item)
+                dc.save()
+                print(dc.designated_courses.all)
         return render(request, 'homePage.html', {'courses': courses})
 
 

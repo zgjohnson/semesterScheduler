@@ -1,12 +1,32 @@
 
 {% extends "base.html" %}
-Catalog
+
 {% block content %}
-<ul>
-{% for course in courses %}
-    <a href="{% url 'viewCourse' course.id %}">
-    <li>{{ courseourse.department_ID }} {{ courseourse.course_Number }} {{ course.course_Title }}</li>
-    </a>
-{% endfor %}
-</ul>
+    Catalog
+    <form action="{% url 'homePage' %}" method="POST">
+        {% csrf_token %}
+        <ul>
+
+            {% for course in courses %}
+                <a href="{% url 'viewCourse' course.id %}">
+                    <li>
+                        <input id="" type="checkbox" value="{{ course.id }}" name="choices">
+                        {{ course.department_ID }}
+                        {{ course.course_Number }}
+                        {{ course.course_Title }}
+                    </li>
+                </a>
+            {% endfor %}
+
+{#            {% for course in designated_courses %}#}
+{#                <li>#}
+{#                    {{ course.department_ID }}#}
+{#                    {{ course.course_Number }}#}
+{#                    {{ course.course_Title }}#}
+{#                </li>#}
+{#            {% endfor %}#}
+        </ul>
+             <input type="submit" value="Add to Designated Courses">
+
+    </form>
 {% endblock %}
