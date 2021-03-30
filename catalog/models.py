@@ -24,7 +24,7 @@ class Period(models.Model):
     MONWED = 'MW'
     MONWEDFRI = 'MWF'
     TUETHU = 'TR'
-    MONTUEWEDTHUFRI = 'MWTWRF'
+    MONTUEWEDTHUFRI = 'MTWRF'
 
     MEETING_DAY_CHOICES = [
         (MONDAY, 'M'),
@@ -32,10 +32,10 @@ class Period(models.Model):
         (WEDNESDAY, 'W'),
         (THURSDAY, 'R'),
         (FRIDAY, 'F'),
-        (MONWED, 'MW'),
+        (MONWED, 'MW'),]
         (MONWEDFRI, 'MWF'),
         (TUETHU, 'TR'),
-        (MONTUEWEDTHUFRI, 'MWTWRF')
+        (MONTUEWEDTHUFRI, 'MTWRF')
     ]
     meeting_day = models.CharField(
         max_length=10,
