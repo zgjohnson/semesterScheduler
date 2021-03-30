@@ -32,7 +32,7 @@ class Period(models.Model):
         (WEDNESDAY, 'W'),
         (THURSDAY, 'R'),
         (FRIDAY, 'F'),
-        (MONWED, 'MW'),]
+        (MONWED, 'MW'),
         (MONWEDFRI, 'MWF'),
         (TUETHU, 'TR'),
         (MONTUEWEDTHUFRI, 'MTWRF')
