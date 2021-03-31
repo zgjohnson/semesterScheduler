@@ -11,6 +11,7 @@ from registration.models import RegistrationProfile
 from registration.models import send_email
 from .models import Course, Section, DesignatedCourses
 from .forms import DesignatedCoursesForm
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class MyRegistrationView(RegistrationView):
@@ -34,25 +35,13 @@ class MyRegistrationView(RegistrationView):
 @login_required
 def homePage(request):
     courses = Course.objects.all()
-    current_user = request.user
 
-    dc = DesignatedCourses(user=current_user)
-    if dc.DoesNotExist:
-        dc.save()
     if request.method == 'GET':
 
         return render(request, 'homePage.html', {'courses': courses})
 
     else:
 
-        form = DesignatedCoursesForm(request.POST)
-        if form.is_valid():
-            for item in form.cleaned_data['choices']:
-                print(item)
-
-                dc.designated_courses.add(item)
-                dc.save()
-                print(dc.designated_courses.all)
         return render(request, 'homePage.html', {'courses': courses})
 
 
@@ -63,5 +52,36 @@ def viewCourse(request, course_pk):
     return render(request, 'viewCourse.html', {'courses': courses, 'sections': section})
 
 
+@login_required
 def schedulePage(request):
     return render(request, 'schedulePage.html')
+
+
+@login_required
+def designatedCourses(request, user_pk):
+
+    courses = Course.objects.all()
+    current_user = get_object_or_404(User, pk=user_pk)
+
+    if request.method == 'GET':
+
+        return render(request, 'designatedCourses.html', {'courses': courses, 'current_user': current_user})
+
+    else:
+
+        form = DesignatedCoursesForm(request.POST)
+        if form.is_valid():
+            for item in form.cleaned_data['choices']:
+                print(item)
+                try:
+                    dc_entry = DesignatedCourses.objects.get(user_id=user_pk)
+                    dc_entry.designated_courses.add(item)
+                    dc_entry.save()
+
+                except ObjectDoesNotExist:
+                    dc_entry = DesignatedCourses(user_id=user_pk)
+                    dc_entry.save()
+                    dc_entry.designated_courses.add(item)
+                    dc_entry.save()
+
+        return render(request, 'designatedCourses.html', {'courses': courses, 'current_user': current_user})

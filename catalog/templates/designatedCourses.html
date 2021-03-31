@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    Designated Courses
+    <form action="{% url 'designatedCourses' user.id %}" method="POST">
+        {% csrf_token %}
+        <ul>
+
+            {% for course in courses %}
+
+                <li>
+                    <input id="" type="checkbox" value="{{ course.id }}" name="choices">
+                    {{ course.department_ID }}
+                    {{ course.course_Number }}
+                    {{ course.course_Title }}
+                </li>
+
+            {% endfor %}
+
+{#            {% for course in designated_courses %}#}
+{#                <li>#}
+{#                    {{ course.department_ID }}#}
+{#                    {{ course.course_Number }}#}
+{#                    {{ course.course_Title }}#}
+{#                </li>#}
+{#            {% endfor %}#}
+        </ul>
+             <input type="submit" value="Add to Designated Courses">
+
+    </form>
+{% endblock %}

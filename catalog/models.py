@@ -55,15 +55,10 @@ class Section(models.Model):
     def __str__(self):
         return self.section_ID
 
-class DesignatedCourses(models.Model):
-    #Dictionary to hold the Courses the key being the Course ID and the value being the Course
-    #I think this would be the best holder for our Course obects. We could also use a set
-    #A set would not let any repeat which is good but it would also not keep them ordered.
-    #I am not sure yet if they need to be ordered for what we need.
-    #I think we need to do a many to many relationship with Courses. Or we can make a many to many relationship
-    # between Course and User. Each User can be related to N number of courses and each course can be related to N number
-    #of Users.
 
+class DesignatedCourses(models.Model):
     designated_courses = models.ManyToManyField(Course)
-    #This model will need to reference a specific user so there needs to be a foreign key referencing a user.
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.user.username) + " Designated Courses"

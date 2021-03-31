@@ -27,6 +27,7 @@ urlpatterns = [
     #Catalog pages
     path('', views.homePage, name='homePage'),
     path('schedule/', views.schedulePage, name='schedulePage'),
-    path('course/<int:course_pk>', views.viewCourse, name='viewCourse')
+    path('course/<int:course_pk>', views.viewCourse, name='viewCourse'),
+    path('designated_courses/<int:user_pk>', views.designatedCourses, name='designatedCourses'),
 
 ]
