@@ -127,7 +127,7 @@ LOGIN_URL = '/accounts/login'
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_ACTIVATION_DAYS = 7
 
-TIME_INPUT_FORMATS = ('%I:%M %p',)
+# TIME_INPUT_FORMATS = ('%I:%M %p',)
 REGISTRATION_AUTO_LOGIN = False
 REGISTRATION_FORM = 'catalog.forms.MyRegistrationForm'
 

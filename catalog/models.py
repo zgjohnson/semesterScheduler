@@ -70,8 +70,5 @@ class ReservedTime(models.Model):
     end_Time = models.TimeField()
     description = models.CharField(max_length=150)
 
-#reserved time foreing key to user
-#start time
-#end time
-#
+
 

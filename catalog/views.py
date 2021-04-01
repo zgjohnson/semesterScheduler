@@ -91,16 +91,12 @@ def reservedTimes(request):
         return render(request, 'reservedTimes.html', {'reservedTimes': rt, 'form': ReservedTimeForm()})
 
     else:
-        try:
-            form = ReservedTimeForm(request.POST)
-            new_rt = form.save(commit=False)
-            new_rt.user = current_user
-            new_rt.save()
-            return render(request, 'reservedTimes.html', {'reservedTimes': rt, 'form': ReservedTimeForm()})
-        except ValueError:
-            return render(request,
-                          'reservedTimes.html',
-                          {'reservedTimes': rt, 'form': ReservedTimeForm(), 'error': 'Bad data passed in. Try again.'})
+        form = ReservedTimeForm(request.POST)
+        new_rt = form.save(commit=False)
+        new_rt.user = current_user
+        new_rt.save()
+        return render(request, 'reservedTimes.html', {'reservedTimes': rt, 'form': ReservedTimeForm()})
+
 
 
 @login_required
