@@ -2,7 +2,8 @@ from django.contrib import admin
 from catalog import models
 from django.core.exceptions import ValidationError
 from django import forms
-
+from import_export import resources
+from catalog.models import Course
 
 class PeriodAdminForm(forms.ModelForm):
     class Meta:
@@ -23,7 +24,10 @@ class PeriodAdmin(admin.ModelAdmin):
 
         obj.save()
 
+class CourseResource (resources.ModelResource):
 
+    class Meta:
+        model = Course
 
 admin.site.register(models.Course)
 admin.site.register(models.Section)
