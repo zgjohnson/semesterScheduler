@@ -10,3 +10,8 @@ class MyRegistrationForm(RegistrationForm):
 class DesignatedCoursesForm(forms.Form):
     choices = forms.ModelMultipleChoiceField(queryset=Course.objects.all(),
                                              widget=forms.CheckboxSelectMultiple)
+
+
+# textfield - description
+
+#time range(start/end)

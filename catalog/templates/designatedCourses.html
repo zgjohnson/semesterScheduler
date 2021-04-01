@@ -2,7 +2,8 @@
 
 {% block content %}
     Designated Courses
-    <form action="{% url 'designatedCourses' user.id %}" method="POST">
+    <form action="{% url 'designatedCourses' %}" method="POST">
+
         {% csrf_token %}
         <ul>
 

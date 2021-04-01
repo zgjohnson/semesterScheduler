@@ -53,7 +53,7 @@ class Section(models.Model):
     periods = models.ManyToManyField(Period)
 
     def __str__(self):
-        return self.section_ID
+        return self.section_ID + " " + self.course.course_Title
 
 
 class DesignatedCourses(models.Model):
@@ -62,3 +62,9 @@ class DesignatedCourses(models.Model):
 
     def __str__(self):
         return str(self.user.username) + " Designated Courses"
+
+#reserved time foreing key to user
+#start time
+#end time
+#
+

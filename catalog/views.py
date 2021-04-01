@@ -58,30 +58,20 @@ def schedulePage(request):
 
 
 @login_required
-def designatedCourses(request, user_pk):
+def designatedCourses(request):
 
     courses = Course.objects.all()
-    current_user = get_object_or_404(User, pk=user_pk)
+    current_user = request.user
 
     if request.method == 'GET':
 
-        return render(request, 'designatedCourses.html', {'courses': courses, 'current_user': current_user})
+        return render(request, 'designatedCourses.html', {'courses': courses})
 
     else:
 
         form = DesignatedCoursesForm(request.POST)
         if form.is_valid():
-            for item in form.cleaned_data['choices']:
-                print(item)
-                try:
-                    dc_entry = DesignatedCourses.objects.get(user_id=user_pk)
-                    dc_entry.designated_courses.add(item)
-                    dc_entry.save()
+            dc_entry, created = DesignatedCourses.objects.get_or_create(user=current_user)
+            dc_entry.designated_courses.add(*form.cleaned_data['choices'])
 
-                except ObjectDoesNotExist:
-                    dc_entry = DesignatedCourses(user_id=user_pk)
-                    dc_entry.save()
-                    dc_entry.designated_courses.add(item)
-                    dc_entry.save()
-
-        return render(request, 'designatedCourses.html', {'courses': courses, 'current_user': current_user})
+        return render(request, 'designatedCourses.html', {'courses': courses})
