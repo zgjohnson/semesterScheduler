@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from django import forms
 from import_export import resources
 from catalog.models import Course
+from import_export.admin import ImportExportActionModelAdmin
 
 class PeriodAdminForm(forms.ModelForm):
     class Meta:
@@ -24,16 +25,23 @@ class PeriodAdmin(admin.ModelAdmin):
 
         obj.save()
 
+
 class CourseResource (resources.ModelResource):
 
     class Meta:
         model = Course
+        fields = ('department_ID', 'course_Number', 'course_Title')
+
+
+class CourseAdmin   (ImportExportActionModelAdmin):
+    resource_class = CourseResource
 
 admin.site.register(models.Course)
 admin.site.register(models.Section)
 admin.site.register(models.Period, PeriodAdmin)
 admin.site.register(models.DesignatedCourses)
 admin.site.register(models.ReservedTime)
+admin.site.register(Course, CourseAdmin)
 
 
 
