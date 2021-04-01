@@ -11,7 +11,7 @@ class PeriodAdminForm(forms.ModelForm):
 
     def clean(self):
         if self.cleaned_data['start_Time'].minute % 5 != 0 or self.cleaned_data['end_Time'].minute % 5 != 0:
-            raise ValidationError("Please input a minute value divisible by 5")
+            raise ValidationError("Please input a minute in increments of 5")
         return super().clean()
 
 
@@ -29,17 +29,10 @@ admin.site.register(models.Course)
 admin.site.register(models.Section)
 admin.site.register(models.Period, PeriodAdmin)
 admin.site.register(models.DesignatedCourses)
+admin.site.register(models.ReservedTime)
 
-#Periods time modification
-#hide the actual start_Time and end_Time field
-#create a new form field on the admin site for hour, minuet, and am/pm
-    #for both start_Time and end_Time
-#when displaying existing periods load actual start_Time
-   #and end_Time from the database model
 
-#create a clean method inside PeriodAdmin class
-#create PeriodAdmin class - will take the three time fields, assemble it and store
-    #it into the Periods database model
+
 
 #create PeriodAdmin class
 #clean method validates it is divisible by 5

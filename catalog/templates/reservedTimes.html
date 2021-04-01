@@ -1,0 +1,23 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+    Reserved Times for {{ user.username }}
+    <h2>{{ error }}</h2>
+    <ul>
+        {% for rt in reservedTimes %}
+            <li>
+                {{ rt.description }} {{ rt.start_Time }} {{ rt.end_Time }} <form action="{% url 'delReservedTime' rt.id %}" method="POST">{% csrf_token %}<input type="submit" value="Delete"></form>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <h3>Add a new Reserved Time</h3>
+    <form action="{% url 'reservedTimes' %}" method="POST">
+        {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create</button>
+    </form>
+
+
+{% endblock %}

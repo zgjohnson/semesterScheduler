@@ -1,6 +1,7 @@
 from django import forms
+from django.forms import ModelForm
 from registration.forms import RegistrationForm
-from .models import Course
+from .models import Course, ReservedTime
 
 
 class MyRegistrationForm(RegistrationForm):
@@ -10,6 +11,15 @@ class MyRegistrationForm(RegistrationForm):
 class DesignatedCoursesForm(forms.Form):
     choices = forms.ModelMultipleChoiceField(queryset=Course.objects.all(),
                                              widget=forms.CheckboxSelectMultiple)
+
+
+class ReservedTimeForm(forms.ModelForm):
+
+    class Meta:
+        model = ReservedTime
+        fields = ['description', 'start_Time', 'end_Time']
+        widgets = {'start_Time': forms.TimeInput(attrs={'type': 'time', 'size': 60}),
+                   'end_Time': forms.TimeInput(attrs={'type': 'time', 'size': 60})}
 
 
 # textfield - description

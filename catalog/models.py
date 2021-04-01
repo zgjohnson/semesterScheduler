@@ -63,6 +63,13 @@ class DesignatedCourses(models.Model):
     def __str__(self):
         return str(self.user.username) + " Designated Courses"
 
+
+class ReservedTime(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    start_Time = models.TimeField()
+    end_Time = models.TimeField()
+    description = models.CharField(max_length=150)
+
 #reserved time foreing key to user
 #start time
 #end time

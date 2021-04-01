@@ -29,5 +29,6 @@ urlpatterns = [
     path('schedule/', views.schedulePage, name='schedulePage'),
     path('course/<int:course_pk>', views.viewCourse, name='viewCourse'),
     path('designated_courses/', views.designatedCourses, name='designatedCourses'),
-
+    path('reserved_times/', views.reservedTimes, name='reservedTimes'),
+    path('reserved_times/<int:pk>', views.delReservedTime, name='delReservedTime'),
 ]
