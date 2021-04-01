@@ -59,13 +59,13 @@ def schedulePage(request):
 
 @login_required
 def designatedCourses(request):
-
     courses = Course.objects.all()
     current_user = request.user
+    dc_list = DesignatedCourses.objects.filter(user=current_user)
 
     if request.method == 'GET':
 
-        return render(request, 'designatedCourses.html', {'courses': courses})
+        return render(request, 'designatedCourses.html', {'courses': courses, 'designatedCourses': dc_list})
 
     else:
 
@@ -74,7 +74,7 @@ def designatedCourses(request):
             dc_entry, created = DesignatedCourses.objects.get_or_create(user=current_user)
             dc_entry.designated_courses.add(*form.cleaned_data['choices'])
 
-        return render(request, 'designatedCourses.html', {'courses': courses})
+        return render(request, 'designatedCourses.html', {'courses': courses, 'designatedCourses': dc_list})
 
 
 @login_required
