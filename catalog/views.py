@@ -106,3 +106,16 @@ def delReservedTime(request, pk):
     if request.method == 'POST':
         rt.delete()
         return redirect('reservedTimes')
+
+@login_required
+def scheduleGenerator(request):
+    current_user = request.user
+    try:
+        rt = ReservedTime.objects.filter(user=current_user)
+
+    except ObjectDoesNotExist:
+        rt = None
+
+    dc = current_user.designatedcourses_set.all()
+    if request.method == 'GET':
+        return render(request, 'scheduleGenerator.html', {'reservedTimes': rt})

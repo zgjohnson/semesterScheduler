@@ -19,7 +19,7 @@
         footer {
         background-color: darkgreen;
         color: #ffc14d;
-        position: absolute;
+        position: absolute; {# this needs to be changed #}
         bottom: 0;
         width: 100%;
         }
@@ -96,6 +96,13 @@
     </div>
   </div>
 </form>
+   {% elif user.is_authenticated == False %}
+
+       <ul class="nav navbar-nav navbar-right">
+        <li><a href="{% url 'registration_register' %}"><span class="glyphicon glyphicon-user"></span>Sign Up</a></li>
+        <li><a href="{% url 'auth_login' %}">Log In</a></li>
+      </ul>
+
    {% endif %}
   </div>
 </nav>
@@ -106,6 +113,7 @@
        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
    </form>
   {% endif %}-->
+
     {% block content %}{% endblock %}
 <footer class="bg-light text-center text-lg-start">
   <div class="container p-4">
