@@ -48,16 +48,15 @@
  <header>
     <h1><img src="{% static 'catalog/wu2.png' %}">Wossamotta University<img src="{% static 'catalog/wu2.png' %}"></h1>
  </header>
-  {% if user.is_authenticated %}
+
    <nav class="navbar navbar-inverse navbar-static-top"> <!--<nav class="navbar navbar-light" style="background-color: #ffc14d;">-->
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand" href="#">Schedule Planner</a> <!-- refreshes the page or goes to the top -->
     </div>
-      {% endif %}
+
    {% if user.is_authenticated %}
     <ul class="nav navbar-nav">
-     <!-- <li class="active"><a href="#">Home</a></li> might take this out it seems redundant// should reference login, or catalog page-->
       <li><a href="{% url 'homePage' %}">Catalog</a></li>
       <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Scheduler
@@ -69,10 +68,13 @@
           <li><a href="#">Saved Schedules</a></li>
         </ul>
       </li>
-        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-log-in"></span>Account</a>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-log-in"></span> Account</a>
       <ul class="dropdown-menu">
          <li><a href="{% url 'auth_logout' %}">Logout</a></li>
       </ul>
+            {% if user.is_staff and user.is_superuser %}
+          <li><a href="{% url 'admin:index' %}">Admin</a></li>
+        {% endif %}
       </li>
     </ul>
     <!--<ul class="nav navbar-nav navbar-right">
@@ -100,7 +102,7 @@
    {% elif user.is_authenticated == False %}
 
        <ul class="nav navbar-nav navbar-right">
-        <li><a href="{% url 'registration_register' %}"><span class="glyphicon glyphicon-user"></span>Sign Up</a></li>
+        <li><a href="{% url 'registration_register' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
         <li><a href="{% url 'auth_login' %}">Log In</a></li>
       </ul>
 
