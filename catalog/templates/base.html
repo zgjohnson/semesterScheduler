@@ -72,7 +72,7 @@
       <ul class="dropdown-menu">
          <li><a href="{% url 'auth_logout' %}">Logout</a></li>
       </ul>
-            {% if user.is_staff and user.is_superuser %}
+        {% if user.is_staff or user.is_superuser %}
           <li><a href="{% url 'admin:index' %}">Admin</a></li>
         {% endif %}
       </li>
