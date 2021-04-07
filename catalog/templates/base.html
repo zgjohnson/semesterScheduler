@@ -19,7 +19,7 @@
         footer {
         background-color: darkgreen;
         color: #ffc14d;
-        position: absolute; {# this needs to be changed #}
+        position: relative; {# this needs to be changed #}
         bottom: 0;
         width: 100%;
         }
@@ -65,7 +65,7 @@
         <ul class="dropdown-menu">
           <li><a href="{% url 'designatedCourses' %}">Possible Courses</a></li>
           <li><a href="{% url 'reservedTimes' %}">Reserved Times</a></li>
-          <li><a href="#">Schedule Generator</a></li>
+          <li><a href="{% url 'scheduleGenerator' %}">Schedule Generator</a></li>
           <li><a href="#">Saved Schedules</a></li>
         </ul>
       </li>

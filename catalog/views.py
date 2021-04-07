@@ -116,6 +116,13 @@ def scheduleGenerator(request):
     except ObjectDoesNotExist:
         rt = None
 
-    dc = current_user.designatedcourses_set.all()
+    dc = DesignatedCourses.objects.filter(user=current_user)
+
+    for user in dc:
+        pc = user.designated_courses.all()
+
+
     if request.method == 'GET':
-        return render(request, 'scheduleGenerator.html', {'reservedTimes': rt})
+        return render(request, 'scheduleGenerator.html', {'reservedTimes': rt, 'possibleCourses': pc})
+    else:
+        return render(request, 'scheduleGenerator.html', {'reservedTimes': rt, 'possibleCourses': pc})

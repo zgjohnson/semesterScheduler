@@ -69,9 +69,26 @@ class ReservedTime(models.Model):
     start_Time = models.TimeField()
     end_Time = models.TimeField()
     description = models.CharField(max_length=150)
+    DAY_CHOICES = [
+        ('Monday', 'Monday'),
+        ('Tuesday', 'Tuesday'),
+        ('Wednesday', 'Wednesday'),
+        ('Thursday', 'Thursday'),
+        ('Friday', 'Friday')
+    ]
+
+    reserved_Day = models.CharField(max_length=10, choices=DAY_CHOICES, default='')
 
     def __str__(self):
         return self.description
+
+
+class Schedule(models.Model):
+    sections = models.ManyToManyField(Section)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user + "Schedule"
 
 
 

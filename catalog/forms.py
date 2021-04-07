@@ -17,7 +17,8 @@ class ReservedTimeForm(forms.ModelForm):
 
     class Meta:
         model = ReservedTime
-        fields = ['description', 'start_Time', 'end_Time']
+        fields = ['description', 'reserved_Day', 'start_Time', 'end_Time']
+
         widgets = {'start_Time': forms.TimeInput(attrs={'type': 'time'}),
                    'end_Time': forms.TimeInput(attrs={'type': 'time'})}
 

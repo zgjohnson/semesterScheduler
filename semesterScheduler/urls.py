@@ -31,4 +31,5 @@ urlpatterns = [
     path('possible_courses/', views.designatedCourses, name='designatedCourses'),
     path('reserved_times/', views.reservedTimes, name='reservedTimes'),
     path('reserved_times/<int:pk>', views.delReservedTime, name='delReservedTime'),
+    path('schedule_generator/', views.scheduleGenerator, name='scheduleGenerator')
 ]

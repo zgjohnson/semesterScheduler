@@ -2,12 +2,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-    Reserved Times for {{ user.username }}
-    <h2>{{ error }}</h2>
+    {% if rt == None %}
+        There are no Reserved Times for {{ user.username }}
+
+    {% else %}
+
+         Reserved Times for {{ user.username }}
+
+    {% endif %}
     <ul>
         {% for rt in reservedTimes %}
             <li>
-                {{ rt.description }} {{ rt.start_Time }} {{ rt.end_Time }} <form action="{% url 'delReservedTime' rt.id %}" method="POST">{% csrf_token %}<input type="submit" value="Delete"></form>
+                {{ rt.description }} {{ rt.reserved_Day }} {{ rt.start_Time }} - {{ rt.end_Time }} <form action="{% url 'delReservedTime' rt.id %}" method="POST">{% csrf_token %}<input type="submit" value="Delete"></form>
             </li>
         {% endfor %}
     </ul>

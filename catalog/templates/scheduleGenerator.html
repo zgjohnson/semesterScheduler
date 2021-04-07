@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Schedule Generator</h1>
+
+
+    {% if rt == None %}
+        There are no Reserved Times for {{ user.username }}
+
+    {% else %}
+
+         Reserved Times for {{ user.username }}
+
+    {% endif %}
+
+
+
+    <ul>
+        {% for rt in reservedTimes %}
+            <li>
+                {{ rt.description }} {{ rt.reserved_Day }} {{ rt.start_Time }} - {{ rt.end_Time }}
+            </li>
+        {% endfor %}
+    </ul>
+
+    Possible Courses for {{ user.username }}
+
+    <form action="{% url 'scheduleGenerator' %}" method="POST">
+
+        {% csrf_token %}
+        <ul>
+
+            {% for course in possibleCourses %}
+
+                <li>
+                    <input id="" type="checkbox" value="{{ course.id }}" name="choices">
+                    {{ course.department_ID }}
+                    {{ course.course_Number }}
+                    {{ course.course_Title }}
+                </li>
+
+            {% endfor %}
+
+
+        </ul>
+             <input type="submit" value="Generate Schedule">
+    </form>
+
+
+{% endblock %}
