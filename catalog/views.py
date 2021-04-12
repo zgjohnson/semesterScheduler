@@ -9,7 +9,7 @@ from django.contrib.auth.hashers import make_password
 from registration.models import RegistrationManager
 from registration.models import RegistrationProfile
 from registration.models import send_email
-from .models import Course, DesignatedCourses, ReservedTime, Section
+from .models import Course, DesignatedCourses, ReservedTime, Section, Period
 from .forms import DesignatedCoursesForm, ReservedTimeForm
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -118,11 +118,37 @@ def scheduleGenerator(request):
 
     dc = DesignatedCourses.objects.filter(user=current_user)
 
+    periods = Period.objects.all()
+    possible_periods = []
+    for reservedTime in rt:
+        print(reservedTime, reservedTime.start_Time, reservedTime.end_Time)
+        for period in periods:
+            print(period)
+            if reservedTime.reserved_Day not in period.meeting_day:
+                possible_periods.append(period)
+            else:
+                if period.start_Time > reservedTime.end_Time:
+                    possible_periods.append(period)
+                elif period.end_Time < reservedTime.start_Time:
+                    possible_periods.append(period)
+    print(possible_periods)
+
+
     for user in dc:
         pc = user.designated_courses.all()
 
-
     if request.method == 'GET':
         return render(request, 'scheduleGenerator.html', {'reservedTimes': rt, 'possibleCourses': pc})
+
     else:
+        form = DesignatedCoursesForm(request.POST)
+        possible_courses = []
+
+        if form.is_valid():
+
+            for course in form.cleaned_data['choices']:
+                possible_courses.append(course)
+
+        print(possible_courses)
+
         return render(request, 'scheduleGenerator.html', {'reservedTimes': rt, 'possibleCourses': pc})

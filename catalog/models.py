@@ -69,12 +69,19 @@ class ReservedTime(models.Model):
     start_Time = models.TimeField()
     end_Time = models.TimeField()
     description = models.CharField(max_length=150)
+
+    MONDAY = 'M'
+    TUESDAY = 'T'
+    WEDNESDAY = 'W'
+    THURSDAY = 'R'
+    FRIDAY = 'F'
+
     DAY_CHOICES = [
-        ('Monday', 'Monday'),
-        ('Tuesday', 'Tuesday'),
-        ('Wednesday', 'Wednesday'),
-        ('Thursday', 'Thursday'),
-        ('Friday', 'Friday')
+        (MONDAY, 'M'),
+        (TUESDAY, 'T'),
+        (WEDNESDAY, 'W'),
+        (THURSDAY, 'R'),
+        (FRIDAY, 'F'),
     ]
 
     reserved_Day = models.CharField(max_length=10, choices=DAY_CHOICES, default='')
