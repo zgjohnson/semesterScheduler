@@ -98,7 +98,6 @@ def reservedTimes(request):
         return render(request, 'reservedTimes.html', {'reservedTimes': rt, 'form': ReservedTimeForm()})
 
 
-
 @login_required
 def delReservedTime(request, pk):
     rt = get_object_or_404(ReservedTime, pk=pk)
@@ -106,6 +105,7 @@ def delReservedTime(request, pk):
     if request.method == 'POST':
         rt.delete()
         return redirect('reservedTimes')
+
 
 @login_required
 def scheduleGenerator(request):
@@ -120,19 +120,23 @@ def scheduleGenerator(request):
 
     periods = Period.objects.all()
     possible_periods = []
-    for reservedTime in rt:
-        print(reservedTime, reservedTime.start_Time, reservedTime.end_Time)
-        for period in periods:
-            print(period)
-            if reservedTime.reserved_Day not in period.meeting_day:
-                possible_periods.append(period)
-            else:
-                if period.start_Time > reservedTime.end_Time:
-                    possible_periods.append(period)
-                elif period.end_Time < reservedTime.start_Time:
-                    possible_periods.append(period)
-    print(possible_periods)
+    for period in periods:
+        possible_periods.append(period)
 
+    for reservedTime in rt:
+        print(reservedTime, reservedTime.reserved_Day, reservedTime.start_Time, reservedTime.end_Time)
+        print(possible_periods)
+        for period in periods:
+
+            if reservedTime.reserved_Day in period.meeting_day:
+                if reservedTime.start_Time <= period.start_Time and period.end_Time <= reservedTime.end_Time:
+                    possible_periods.remove(period)
+                elif period.start_Time <= reservedTime.start_Time and reservedTime.end_Time <= period.end_Time:
+                    possible_periods.remove(period)
+                elif reservedTime.start_Time <= period.start_Time <= reservedTime.end_Time or reservedTime.start_Time <= period.end_Time <= reservedTime.end_Time:
+                    possible_periods.remove(period)
+    print('These are the possible periods')
+    print(possible_periods)
 
     for user in dc:
         pc = user.designated_courses.all()
