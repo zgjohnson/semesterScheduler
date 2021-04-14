@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
 from registration.backends.default.views import RegistrationView
-
+from collections import defaultdict
 from django.contrib.auth.models import Group
 from .forms import MyRegistrationForm
 from django.contrib.auth.hashers import make_password
@@ -119,7 +119,9 @@ def scheduleGenerator(request):
     dc = DesignatedCourses.objects.filter(user=current_user)
 
     periods = Period.objects.all()
+
     possible_periods = []
+    possible_sections = []
     for period in periods:
         possible_periods.append(period)
 
@@ -127,7 +129,6 @@ def scheduleGenerator(request):
         print(reservedTime, reservedTime.reserved_Day, reservedTime.start_Time, reservedTime.end_Time)
         print(possible_periods)
         for period in periods:
-
             if reservedTime.reserved_Day in period.meeting_day:
                 if reservedTime.start_Time <= period.start_Time and period.end_Time <= reservedTime.end_Time:
                     possible_periods.remove(period)
@@ -135,6 +136,7 @@ def scheduleGenerator(request):
                     possible_periods.remove(period)
                 elif reservedTime.start_Time <= period.start_Time <= reservedTime.end_Time or reservedTime.start_Time <= period.end_Time <= reservedTime.end_Time:
                     possible_periods.remove(period)
+
     print('These are the possible periods')
     print(possible_periods)
 
@@ -145,14 +147,27 @@ def scheduleGenerator(request):
         return render(request, 'scheduleGenerator.html', {'reservedTimes': rt, 'possibleCourses': pc})
 
     else:
+
         form = DesignatedCoursesForm(request.POST)
-        possible_courses = []
+        course_sections = {}
 
         if form.is_valid():
 
             for course in form.cleaned_data['choices']:
-                possible_courses.append(course)
+                sections = Section.objects.filter(course=course)
+                for section in sections:
+                    possible_sections.append(section)
 
-        print(possible_courses)
+        for section in possible_sections:
+            for period in possible_periods:
+                if period in section.periods.all():
+                    course_sections[section.course.course_Title] = course_sections.get(section.course.course_Title, {})
+                    course_sections[section.course.course_Title][section.section_ID] = course_sections.get(
+                        section.course.course_Title).get(section.section_ID, []) + [section.periods.get(id=period.id)]
+        
+
+
+        print(possible_sections)
+        print(course_sections)
 
         return render(request, 'scheduleGenerator.html', {'reservedTimes': rt, 'possibleCourses': pc})
