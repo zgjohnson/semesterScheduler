@@ -30,7 +30,8 @@ admin.site.register(models.Section)
 admin.site.register(models.Period, PeriodAdmin)
 admin.site.register(models.DesignatedCourses)
 admin.site.register(models.ReservedTime)
-
+admin.site.register(models.ScheduleOption)
+admin.site.register(models.ScheduledCourses)
 
 
 

@@ -4,6 +4,7 @@
     <h1>Schedule Generator</h1>
 
 
+
     {% if rt == None %}
         There are no Reserved Times for {{ user.username }}
 
@@ -22,6 +23,8 @@
             </li>
         {% endfor %}
     </ul>
+
+    <h4>{{ error }}</h4>
 
     Possible Courses for {{ user.username }}
 
@@ -46,5 +49,23 @@
              <input type="submit" value="Generate Schedule">
     </form>
 
+    Schedule Options
+    <ul>
+
+        {% for schedule in schedule_Options %}
+            <li>
+                <ol>
+                    {% for course in schedule.scheduled_Courses.all %}
+
+                        <li>
+                            {{ course.section }} {{ course.period }}
+                        </li>
+
+                    {% endfor %}
+                </ol>
+            </li>
+        {% endfor %}
+
+    </ul>
 
 {% endblock %}
