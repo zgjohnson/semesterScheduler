@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404, redirect
 from registration.backends.default.views import RegistrationView
 from collections import defaultdict
+from itertools import product, chain, combinations
 from django.contrib.auth.models import Group
 from .forms import MyRegistrationForm
 from django.contrib.auth.hashers import make_password
@@ -139,6 +140,7 @@ def scheduleGenerator(request):
 
     print('These are the possible periods')
     print(possible_periods)
+    print(possible_periods)
 
     for user in dc:
         pc = user.designated_courses.all()
@@ -150,24 +152,85 @@ def scheduleGenerator(request):
 
         form = DesignatedCoursesForm(request.POST)
         course_sections = {}
+        schedules = {}
+        course_count = 0
 
         if form.is_valid():
-
             for course in form.cleaned_data['choices']:
+                course_count += 1
                 sections = Section.objects.filter(course=course)
                 for section in sections:
                     possible_sections.append(section)
 
+        # for section in possible_sections:
+        #     for period in possible_periods:
+        #         if period in section.periods.all():
+        #             course_sections[section.course.course_Title] = course_sections.get(section.course.course_Title, {})
+        #             course_sections[section.course.course_Title][section.section_ID] = course_sections.get(
+        #                 section.course.course_Title).get(section.section_ID, []) + [section.periods.get(id=period.id)]
         for section in possible_sections:
             for period in possible_periods:
                 if period in section.periods.all():
-                    course_sections[section.course.course_Title] = course_sections.get(section.course.course_Title, {})
-                    course_sections[section.course.course_Title][section.section_ID] = course_sections.get(
-                        section.course.course_Title).get(section.section_ID, []) + [section.periods.get(id=period.id)]
-        
-
+                    course_sections[section.id] = course_sections.get(section.id, []) + [period.id]
 
         print(possible_sections)
         print(course_sections)
+        # all_courses = sorted(course_sections)
+        # combinations = it.product(*(course_sections[Name] for Name in all_courses))
+        # print(list(combinations))
+        keys, values = zip(*course_sections.items())
+        permutations_dicts = [dict(zip(keys, v)) for v in product(*values)]
+        print(permutations_dicts)
+        perm2 = []
 
-        return render(request, 'scheduleGenerator.html', {'reservedTimes': rt, 'possibleCourses': pc})
+        def all_combinations(lst):
+            return chain(*[combinations(lst, i + 1) for i in range(len(lst))])
+
+        for comb in all_combinations(course_sections):
+            for prod in product(*(course_sections[k] for k in comb)):
+                use = dict(zip(comb, prod))
+                if len(use) == course_count:
+                    perm2.append(use)
+                    print(use)
+        print(perm2)
+        items_to_remove = set()
+        for i in range(len(perm2)):
+            temp_dictionary = perm2[i]
+            temp_dictionary2 = perm2[i]
+            for k, v in temp_dictionary.items():
+                for k2, v2 in temp_dictionary2.items():
+                    if k == k2:
+                        continue
+                    else:
+                        per1 = Period.objects.get(id=v)
+                        per2 = Period.objects.get(id=v2)
+                        sec1 = Section.objects.get(id=k)
+                        sec2 = Section.objects.get(id=k2)
+                        if sec1.course.course_Title == sec2.course.course_Title:
+                            items_to_remove.add(i)
+                        if per1.meeting_day in per2.meeting_day or per2.meeting_day in per1.meeting_day:
+                            if per1.start_Time <= per2.start_Time and per2.end_Time <= per1.end_Time:
+                                items_to_remove.add(i)
+                                break
+
+                            elif per2.start_Time <= per1.start_Time and per1.end_Time <= per2.end_Time:
+                                items_to_remove.add(i)
+                                break
+                            elif per1.start_Time <= per2.start_Time <= per1.end_Time or per1.start_Time <= per2.end_Time <= per1.end_Time:
+                                items_to_remove.add(i)
+                                break
+        schedules = []
+        for i in range(len(perm2)):
+            if i not in items_to_remove:
+                schedules.append(perm2[i])
+
+        print(items_to_remove)
+        print(schedules)
+        for i in range(len(schedules)):
+
+            for k, v in schedules[i].items():
+                print(schedules)
+
+
+        return render(request, 'scheduleGenerator.html',
+                      {'reservedTimes': rt, 'possibleCourses': pc, 'schedules': schedules})
