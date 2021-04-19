@@ -79,6 +79,16 @@ def designatedCourses(request):
 
 
 @login_required
+def delDesignatedCourse(request, pk):
+    dc = DesignatedCourses.objects.get(user=request.user)
+    course = Course.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        dc.designated_courses.remove(course)
+        return redirect('designatedCourses')
+
+
+@login_required
 def reservedTimes(request):
     current_user = request.user
 
@@ -137,7 +147,8 @@ def scheduleGenerator(request):
                     possible_periods.remove(period)
                 elif reservedTime.start_Time <= period.start_Time <= reservedTime.end_Time or reservedTime.start_Time <= period.end_Time <= reservedTime.end_Time:
                     possible_periods.remove(period)
-
+    if dc.all() == ObjectDoesNotExist:
+        pc = None
     for user in dc:
         pc = user.designated_courses.all()
 
@@ -161,13 +172,13 @@ def scheduleGenerator(request):
 
         if course_count == 0:
             error = "Please choose from the Possible Courses"
-            return render(request, 'scheduleGenerator.html', {'reservedTimes:': rt, 'possibleCourses': pc, 'error': error})
+            return render(request, 'scheduleGenerator.html',
+                          {'reservedTimes:': rt, 'possibleCourses': pc, 'error': error})
 
         for section in possible_sections:
             for period in possible_periods:
                 if period in section.periods.all():
                     course_sections[section.id] = course_sections.get(section.id, []) + [period.id]
-
 
         # all_courses = sorted(course_sections)
         # combinations = it.product(*(course_sections[Name] for Name in all_courses))
@@ -187,7 +198,6 @@ def scheduleGenerator(request):
                 if len(use) == course_count:
                     permutations_dicts.append(use)
                     perm2.append(use)
-
 
         items_to_remove = set()
         for i in range(len(permutations_dicts)):

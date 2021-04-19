@@ -20,9 +20,7 @@ class PeriodAdmin(admin.ModelAdmin):
     list_display = ("id", "start_Time", "end_Time", "meeting_day")
 
     def save_model(self, request, obj, form, change):
-
         obj.save()
-
 
 
 admin.site.register(models.Course)
@@ -33,9 +31,7 @@ admin.site.register(models.ReservedTime)
 admin.site.register(models.ScheduleOption)
 admin.site.register(models.ScheduledCourses)
 
-
-
-#create PeriodAdmin class
-#clean method validates it is divisible by 5
-#have message saying enter time in 5 minuet increments
-#save_model function not clean
+# create PeriodAdmin class
+# clean method validates it is divisible by 5
+# have message saying enter time in 5 minuet increments
+# save_model function not clean

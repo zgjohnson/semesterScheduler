@@ -14,6 +14,7 @@
                     {{ course.department_ID }}
                     {{ course.course_Number }}
                     {{ course.course_Title }}
+
                 </li>
 
             {% endfor %}
@@ -34,6 +35,7 @@
                 {{ course.department_ID }}
                 {{ course.course_Number }}
                 {{ course.course_Title }}
+                <form action="{% url 'delDesignatedCourse' course.id %}" method="POST">{% csrf_token %}<input type="submit" value="Delete"></form>
             </li>
         {% endfor %}
     {% endfor %}
