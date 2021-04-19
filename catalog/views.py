@@ -138,10 +138,6 @@ def scheduleGenerator(request):
                 elif reservedTime.start_Time <= period.start_Time <= reservedTime.end_Time or reservedTime.start_Time <= period.end_Time <= reservedTime.end_Time:
                     possible_periods.remove(period)
 
-    print('These are the possible periods')
-    print(possible_periods)
-    print(possible_periods)
-
     for user in dc:
         pc = user.designated_courses.all()
 
