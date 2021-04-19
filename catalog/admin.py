@@ -2,8 +2,9 @@ from django.contrib import admin
 from catalog import models
 from django.core.exceptions import ValidationError
 from django import forms
-
-
+from import_export import resources
+from import_export.admin import ImportExportModelAdmin
+from .models import Course
 class PeriodAdminForm(forms.ModelForm):
     class Meta:
         model = models.Period
@@ -20,10 +21,18 @@ class PeriodAdmin(admin.ModelAdmin):
     list_display = ("id", "start_Time", "end_Time", "meeting_day")
 
     def save_model(self, request, obj, form, change):
+
         obj.save()
 
+class CourseResource (resources.ModelResource):
+    class Meta:
+        model = Course
+        exclude = ('id', )
 
-admin.site.register(models.Course)
+class CourseAdmin (ImportExportModelAdmin):
+        resource_class = CourseResource
+
+admin.site.register(models.Course, CourseAdmin)
 admin.site.register(models.Section)
 admin.site.register(models.Period, PeriodAdmin)
 admin.site.register(models.DesignatedCourses)
@@ -31,7 +40,9 @@ admin.site.register(models.ReservedTime)
 admin.site.register(models.ScheduleOption)
 admin.site.register(models.ScheduledCourses)
 
-# create PeriodAdmin class
-# clean method validates it is divisible by 5
-# have message saying enter time in 5 minuet increments
-# save_model function not clean
+
+
+#create PeriodAdmin class
+#clean method validates it is divisible by 5
+#have message saying enter time in 5 minuet increments
+#save_model function not clean
