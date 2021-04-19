@@ -36,12 +36,12 @@ class CourseResource (resources.ModelResource):
 class CourseAdmin   (ImportExportActionModelAdmin):
     resource_class = CourseResource
 
-admin.site.register(models.Course)
+admin.site.register(models.Course, CourseAdmin)
 admin.site.register(models.Section)
 admin.site.register(models.Period, PeriodAdmin)
 admin.site.register(models.DesignatedCourses)
 admin.site.register(models.ReservedTime)
-admin.site.register(Course, CourseAdmin)
+#admin.site.register(Course, CourseAdmin)
 
 
 
