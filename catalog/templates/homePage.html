@@ -6,11 +6,18 @@
 
         {% for course in courses %}
             <a href="{% url 'viewCourse' course.id %}">
-                <li>
-                    {{ course.department_ID }}
-                    {{ course.course_Number }}
-                    {{ course.course_Title }}
-                </li>
+                <table style="width:30%">
+                    <colgroup>
+                        <col span="1" style="width: 15%;">
+                        <col span="1" style="width: 20%;">
+                        <col span="1" style="width: 40%;">
+                    </colgroup>
+                    <tr>
+                        <td>{{ course.department_ID }}</td>
+                        <td>{{ course.course_Number }}</td>
+                        <td>{{ course.course_Title }}</td>
+                    </tr>
+                </table>
             </a>
         {% endfor %}
 
