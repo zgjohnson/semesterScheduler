@@ -2,13 +2,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-    Catalog
-
+        <h1>Catalog</h1>
+        <p>These are the courses offered by Wossamotta University this semester.</p>
+                    <table style="width:50%">
+                    <colgroup>
+                        <col span="1" style="width: 20%;">
+                        <col span="1" style="width: 20%;">
+                        <col span="1" style="width: 40%;">
+                    </colgroup>
+                    <tr>
+                        <th>Department ID</th>
+                        <th>Course Number</th>
+                        <th>Course Name</th>
+                    </tr>
+                </table>
         {% for course in courses %}
             <a href="{% url 'viewCourse' course.id %}">
-                <table style="width:30%">
+                <table style="width:50%">
                     <colgroup>
-                        <col span="1" style="width: 15%;">
+                        <col span="1" style="width: 20%;">
                         <col span="1" style="width: 20%;">
                         <col span="1" style="width: 40%;">
                     </colgroup>
