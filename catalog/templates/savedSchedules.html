@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Saved Schedules</h1>
+
+    {% if saved_schedules is None %}
+        There are no saved schedules
+    {% else %}
+
+    <ul>
+
+        {% for schedule in saved_schedules %}
+            <li>
+                <ol>
+
+                    {% for course in schedule.savedScheduledCourse.all %}
+
+                        <li>
+                            {{ course.section }} {{ course.period }}
+                        </li>
+
+                    {% endfor %}
+                </ol>
+            </li>
+            <form action="{% url 'delSchedules' schedule.id %}" method="POST">{% csrf_token %}<input type="submit" value="Delete"></form>
+        {% endfor %}
+
+    </ul>
+    {% endif %}
+
+{% endblock %}

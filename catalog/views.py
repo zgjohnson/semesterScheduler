@@ -10,7 +10,7 @@ from django.contrib.auth.hashers import make_password
 from registration.models import RegistrationManager
 from registration.models import RegistrationProfile
 from registration.models import send_email
-from .models import Course, DesignatedCourses, ReservedTime, Section, Period, ScheduledCourses, ScheduleOption
+from .models import Course, DesignatedCourses, ReservedTime, Section, Period, ScheduledCourses, ScheduleOption, Schedule
 from .forms import DesignatedCoursesForm, ReservedTimeForm
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -121,18 +121,25 @@ def delReservedTime(request, pk):
 @login_required
 def scheduleGenerator(request):
     current_user = request.user
+
     try:
         rt = ReservedTime.objects.filter(user=current_user)
 
     except ObjectDoesNotExist:
         rt = None
 
-    dc = DesignatedCourses.objects.filter(user=current_user)
+    try:
+        schedule_options = ScheduleOption.objects.filter(user=current_user)
+
+    except ObjectDoesNotExist:
+        schedule_options = None
+
+    pc = DesignatedCourses.objects.get(user=current_user).designated_courses.all()
 
     periods = Period.objects.all()
-
     possible_periods = []
     possible_sections = []
+
     for period in periods:
         possible_periods.append(period)
 
@@ -147,13 +154,10 @@ def scheduleGenerator(request):
                     possible_periods.remove(period)
                 elif reservedTime.start_Time <= period.start_Time <= reservedTime.end_Time or reservedTime.start_Time <= period.end_Time <= reservedTime.end_Time:
                     possible_periods.remove(period)
-    if dc.all() == ObjectDoesNotExist:
-        pc = None
-    for user in dc:
-        pc = user.designated_courses.all()
 
     if request.method == 'GET':
-        return render(request, 'scheduleGenerator.html', {'reservedTimes': rt, 'possibleCourses': pc})
+        return render(request, 'scheduleGenerator.html',
+                      {'reservedTimes': rt, 'possibleCourses': pc, 'schedule_Options': schedule_options})
 
     else:
 
@@ -230,14 +234,46 @@ def scheduleGenerator(request):
                 schedules.append(permutations_dicts[i])
 
         for i in range(len(schedules)):
-            schedule_Option = ScheduleOption.objects.create(user=current_user)
+            schedule_option = ScheduleOption.objects.create(user=current_user)
             for k, v in schedules[i].items():
-                scheduled_Course = ScheduledCourses.objects.create(section_id=k, period_id=v, groupNumber=i)
-                scheduled_Course.save()
-                schedule_Option.scheduled_Courses.add(scheduled_Course)
-                schedule_Option.save()
+                scheduled_course = ScheduledCourses.objects.create(section_id=k, period_id=v, groupNumber=i)
+                scheduled_course.save()
+                schedule_option.scheduled_Courses.add(scheduled_course)
+                schedule_option.save()
 
-        schedule_Options = ScheduleOption.objects.filter(user=current_user)
+        schedule_options = ScheduleOption.objects.filter(user=current_user)
 
         return render(request, 'scheduleGenerator.html',
-                      {'reservedTimes': rt, 'possibleCourses': pc, 'schedule_Options': schedule_Options})
+                      {'reservedTimes': rt, 'possibleCourses': pc, 'schedule_Options': schedule_options})
+
+
+@login_required
+def saveSchedule(request, pk):
+    if request.method == 'POST':
+        schedule_option = ScheduleOption.objects.get(pk=pk)
+        saved_schedule = Schedule.objects.create(user=request.user)
+        for course in schedule_option.scheduled_Courses.all():
+            saved_schedule.savedScheduledCourse.add(course)
+            saved_schedule.save()
+
+        return redirect(scheduleGenerator)
+
+
+@login_required
+def savedSchedules(request):
+    try:
+        saved_schedules = Schedule.objects.filter(user=request.user)
+    except ObjectDoesNotExist:
+        saved_schedules = None
+
+    if request.method == 'GET':
+        return render(request, 'savedSchedules.html', {'saved_schedules': saved_schedules})
+
+
+@login_required
+def delSchedules(request, pk):
+    schedule = Schedule.objects.get(pk=pk)
+    if request.method == 'POST':
+        schedule.delete()
+        return redirect('savedSchedules')
+

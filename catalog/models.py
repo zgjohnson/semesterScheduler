@@ -103,7 +103,8 @@ class ScheduleOption(models.Model):
     scheduled_Courses = models.ManyToManyField(ScheduledCourses)
 
 class Schedule(models.Model):
-    sections = models.ManyToManyField(Section)
+    savedScheduledCourse = models.ManyToManyField(ScheduledCourses)
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):

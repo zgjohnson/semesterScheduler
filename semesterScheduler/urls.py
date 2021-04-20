@@ -32,5 +32,8 @@ urlpatterns = [
     path('possible_courses/<int:pk>', views.delDesignatedCourse, name='delDesignatedCourse'),
     path('reserved_times/', views.reservedTimes, name='reservedTimes'),
     path('reserved_times/<int:pk>', views.delReservedTime, name='delReservedTime'),
-    path('schedule_generator/', views.scheduleGenerator, name='scheduleGenerator')
+    path('schedule_generator/', views.scheduleGenerator, name='scheduleGenerator'),
+    path('schedule_generator/<int:pk>', views.saveSchedule, name='saveSchedule'),
+    path('saved_schedules/', views.savedSchedules, name='savedSchedules'),
+    path('saved_schedules/<int:pk>', views.delSchedules, name='delSchedules'),
 ]
