@@ -90,17 +90,17 @@ class ReservedTime(models.Model):
         return self.description
 
 
-
-
 class ScheduledCourses(models.Model):
     section = models.ForeignKey(Section, on_delete=models.CASCADE)
     period = models.ForeignKey(Period, on_delete=models.CASCADE)
 
     groupNumber = models.IntegerField(default=0)
 
+
 class ScheduleOption(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     scheduled_Courses = models.ManyToManyField(ScheduledCourses)
+
 
 class Schedule(models.Model):
     savedScheduledCourse = models.ManyToManyField(ScheduledCourses)
@@ -109,6 +109,3 @@ class Schedule(models.Model):
 
     def __str__(self):
         return self.user + "Schedule"
-
-
-

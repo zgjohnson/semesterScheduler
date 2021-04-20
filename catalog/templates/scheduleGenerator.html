@@ -25,7 +25,10 @@
     </ul>
 
     <h4>{{ error }}</h4>
+
     {% if possibleCourses.count == 0 %}
+        There are no Possible Courses for {{ user.username }}
+    {% elif possibleCourses == None %}
         There are no Possible Courses for {{ user.username }}
     {% else %}
         Possible Courses for {{ user.username }}
@@ -57,15 +60,15 @@
 
         {% for schedule in schedule_Options %}
             <li>
-                <ol>
+                <ul>
                     {% for course in schedule.scheduled_Courses.all %}
 
                         <li>
-                            {{ course.section }} {{ course.period }}
+                            {{ course.section.course.course_Title }} Section: {{ course.section.section_ID }} Instructor: {{ course.section.instructor }} Period: {{ course.period.meeting_day }} {{ course.period.start_Time }} - {{ course.period.end_Time }}
                         </li>
 
                     {% endfor %}
-                </ol>
+                </ul>
             </li>
             <form action="{% url 'saveSchedule' schedule.id %}" method="POST">{% csrf_token %}<input type="submit" value="Save"></form>
         {% endfor %}

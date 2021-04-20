@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.db.models import Max
+
 from django.shortcuts import render, get_object_or_404, redirect
 from registration.backends.default.views import RegistrationView
-from collections import defaultdict
+
 from itertools import product, chain, combinations
 from django.contrib.auth.models import Group
 from .forms import MyRegistrationForm
@@ -134,8 +135,10 @@ def scheduleGenerator(request):
     except ObjectDoesNotExist:
         schedule_options = None
 
-    pc = DesignatedCourses.objects.get(user=current_user).designated_courses.all()
-
+    try:
+        pc = DesignatedCourses.objects.get(user=current_user).designated_courses.all()
+    except ObjectDoesNotExist:
+        pc = None
     periods = Period.objects.all()
     possible_periods = []
     possible_sections = []
@@ -254,8 +257,8 @@ def saveSchedule(request, pk):
         saved_schedule = Schedule.objects.create(user=request.user)
         for course in schedule_option.scheduled_Courses.all():
             saved_schedule.savedScheduledCourse.add(course)
-            saved_schedule.save()
 
+        saved_schedule.save()
         return redirect(scheduleGenerator)
 
 

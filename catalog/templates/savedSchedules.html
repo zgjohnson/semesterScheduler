@@ -1,26 +1,25 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Saved Schedules</h1>
+    <h1>Saved Schedules for {{ user.username }}</h1>
 
     {% if saved_schedules is None %}
-        There are no saved schedules
+        There are no saved schedules for {{ user.username }}
     {% else %}
-
     <ul>
 
         {% for schedule in saved_schedules %}
             <li>
-                <ol>
+                <ul>
 
                     {% for course in schedule.savedScheduledCourse.all %}
 
                         <li>
-                            {{ course.section }} {{ course.period }}
+                            {{ course.section.course.course_Title }} Section: {{ course.section.section_ID }} Instructor: {{ course.section.instructor }} Period: {{ course.period.meeting_day }} {{ course.period.start_Time }} - {{ course.period.end_Time }}
                         </li>
 
                     {% endfor %}
-                </ol>
+                </ul>
             </li>
             <form action="{% url 'delSchedules' schedule.id %}" method="POST">{% csrf_token %}<input type="submit" value="Delete"></form>
         {% endfor %}
