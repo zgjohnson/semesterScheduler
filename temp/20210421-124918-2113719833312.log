@@ -1,0 +1,85 @@
+Content-Type: multipart/alternative;
+ boundary="===============2236735068591462803=="
+MIME-Version: 1.0
+Subject: Account activation on localhost:8000
+From: webmaster@localhost
+To: bob@gmail.com
+Date: Wed, 21 Apr 2021 17:49:18 -0000
+Message-ID: 
+ <161902735809.29572.15509007324080502459@DESKTOP-0H8RH62.attlocal.net>
+
+--===============2236735068591462803==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+
+
+You (or someone pretending to be you) have asked to register an account at
+localhost:8000.  If this wasn't you, please ignore this email
+and your address will be removed from our records.
+
+
+To activate this account, please click the following link within the next
+7 days:
+
+
+http://localhost:8000/accounts/activate/792bc34c0ca0e6769857233db73916e4772ef0594afd2d55080b82421eb91766/
+
+
+Sincerely,
+localhost:8000 Management
+
+
+
+
+
+--===============2236735068591462803==
+Content-Type: text/html; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>localhost:8000 registration</title>
+</head>
+
+<body>
+<p>
+    
+    You (or someone pretending to be you) have asked to register an account at
+    localhost:8000.  If this wasn't you, please ignore this email
+    and your address will be removed from our records.
+    
+</p>
+<p>
+    
+    To activate this account, please click the following link within the next
+    7 days:
+    
+</p>
+
+<p>
+    <a href="http://localhost:8000/accounts/activate/792bc34c0ca0e6769857233db73916e4772ef0594afd2d55080b82421eb91766/">
+        localhost:8000/accounts/activate/792bc34c0ca0e6769857233db73916e4772ef0594afd2d55080b82421eb91766/
+    </a>
+</p>
+<p>
+    
+    Sincerely,
+    localhost:8000 Management
+    
+</p>
+</body>
+
+</html>
+
+
+
+
+--===============2236735068591462803==--
+
+-------------------------------------------------------------------------------

@@ -60,23 +60,23 @@ def schedulePage(request):
 
 
 @login_required
+# Function that returns a render for the Possible Course page
 def designatedCourses(request):
-    courses = Course.objects.all()
-    current_user = request.user
-    dc_list = DesignatedCourses.objects.filter(user=current_user)
+    courses = Course.objects.all()  # Creates a QuerySet of all the Courses in the Catalog
+    current_user = request.user  # Creates an instance of user with the current user as parameters.
+    dc_list = DesignatedCourses.objects.filter(user=current_user)  # QuerySet of the DesignatedCourse object that belongs to the current User.
 
-    if request.method == 'GET':
-
+    if request.method == 'GET':  # If the request is a GET request
+        # passes the request, the html page and a dictionary containing both the course queryset and the designatedCourses queryset.
         return render(request, 'designatedCourses.html', {'courses': courses, 'designatedCourses': dc_list})
 
-    else:
+    else:  # The request is a POST request
+        form = DesignatedCoursesForm(request.POST)  # Creates a form from the DCForm template with the information from the request passed in.
+        if form.is_valid(): # Checks to see if the information from the form is valid
+            dc_entry, created = DesignatedCourses.objects.get_or_create(user=current_user)  # This creates a new DC object if there is not already one connected to the current user.
+            dc_entry.designated_courses.add(*form.cleaned_data['choices']) # This adds the courses chosen in the form to the users DC.designated_courses relationship.
 
-        form = DesignatedCoursesForm(request.POST)
-        if form.is_valid():
-            dc_entry, created = DesignatedCourses.objects.get_or_create(user=current_user)
-            dc_entry.designated_courses.add(*form.cleaned_data['choices'])
-
-        return render(request, 'designatedCourses.html', {'courses': courses, 'designatedCourses': dc_list})
+        return render(request, 'designatedCourses.html', {'courses': courses, 'designatedCourses': dc_list})  # passes the request, the html page and a dictionary containing both the course queryset and the designatedCourses queryset.
 
 
 @login_required
@@ -279,4 +279,3 @@ def delSchedules(request, pk):
     if request.method == 'POST':
         schedule.delete()
         return redirect('savedSchedules')
-
