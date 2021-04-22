@@ -138,7 +138,7 @@ def scheduleGenerator(request):
     possible_sections = []  # Empty list used to store possible sections
     permutations_dicts = []  # List used to store the possible section/period permutations
     items_to_remove = set()  # Set of items to remove from the list of possible section/period permutations. Used set here because items will not repeat.
-    schedules = []
+    schedules = []  # List of dictionaries of schedules with section.id as keys and period.id as values
 
     for period in periods:  # Adds every period to the list
         possible_periods.append(period)
@@ -233,7 +233,7 @@ def scheduleGenerator(request):
                         sec2 = Section.objects.get(id=k2)
                         # Checks to see if there are sections with the same corresponding Course
                         if sec1.course.course_Title == sec2.course.course_Title:
-                            items_to_remove.add(i)  # Adds the location of the dictionary to the set
+                            items_to_remove.add(i)  # Adds the index of the dictionary to the set
                         # Checks to to see if the periods meet on the same day by comparing strings
                         if per1.meeting_day in per2.meeting_day or per2.meeting_day in per1.meeting_day:
                             # If they are on the same day this checks to see if times overlap
@@ -247,19 +247,26 @@ def scheduleGenerator(request):
                                 items_to_remove.add(i)
                                 break
 
-        # Adds the items in the dictionary of permutations to the schedule list if that
+        # Adds the items in the dictionary of permutations to the schedule list if that dictionaries index is not in the items_to_remove set
         for i in range(len(permutations_dicts)):
             if i not in items_to_remove:
                 schedules.append(permutations_dicts[i])
 
+        # Loops through the list of schedules
         for i in range(len(schedules)):
+            # Creates an instance of a schedule option for the user
             schedule_option = ScheduleOption.objects.create(user=current_user)
+            # Loops through each kev/value pair in the dictionary at index i in the list of dictionaries
             for k, v in schedules[i].items():
+                # Creates an instance of a pairing of Section and Period associated with a user
                 scheduled_course = ScheduledCourses.objects.create(section_id=k, period_id=v, groupNumber=i)
                 scheduled_course.save()
+                # Adds that pairing to the Schedule option object
                 schedule_option.scheduled_Courses.add(scheduled_course)
+                # Saves the schedule option object
                 schedule_option.save()
 
+        # QuerySet to find the schedule options associated with a user
         schedule_options = ScheduleOption.objects.filter(user=current_user)
 
         return render(request, 'scheduleGenerator.html',
@@ -267,33 +274,39 @@ def scheduleGenerator(request):
 
 
 @login_required  # Requires user to be logged in
+# Function used to save a Schedule option
 def saveSchedule(request, pk):
     if request.method == 'POST':
+        # Grabs the requested schedule option
         schedule_option = ScheduleOption.objects.get(pk=pk)
+        # Creates a new schedule object associated with the user
         saved_schedule = Schedule.objects.create(user=request.user)
+        # Adds each scheduled course in the schedule option to the saved schedule
         for course in schedule_option.scheduled_Courses.all():
             saved_schedule.savedScheduledCourse.add(course)
-
+        # Saves the saved schedule
         saved_schedule.save()
         return redirect('scheduleGenerator')
 
 
 @login_required  # Requires user to be logged in
+# Function used to retrieve and render the saved Schedule objects
 def savedSchedules(request):
-    try:
+    try:  # Tries to find the Schedule objects associated with the user
         saved_schedules = Schedule.objects.filter(user=request.user)
     except ObjectDoesNotExist:
         saved_schedules = None
-
-    print(saved_schedules)
-
+    # Returns the objects
     if request.method == 'GET':
         return render(request, 'savedSchedules.html', {'saved_schedules': saved_schedules})
 
 
-@login_required
+@login_required  # Requires user to be logged in
+# Function used to delete a saved Schedule object
 def delSchedules(request, pk):
+    # Creates an instance of the Schedule object with matching primary key
     schedule = Schedule.objects.get(pk=pk)
     if request.method == 'POST':
+        # Deletes the Schedule object
         schedule.delete()
         return redirect('savedSchedules')

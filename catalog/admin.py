@@ -25,7 +25,8 @@ class PeriodAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.save()
 
-#CSV Import for Course
+
+# CSV Import for Course
 class CourseResource(resources.ModelResource):
     class Meta:
         model = Course
@@ -34,11 +35,13 @@ class CourseResource(resources.ModelResource):
 class CourseAdmin(ImportExportModelAdmin):
     resource_class = CourseResource
 
-#CSV Import for Section
+
+# CSV Import for Section
 
 class SectionResource(resources.ModelResource):
     class Meta:
         model = Section
+
 
 class SectionAdmin(ImportExportModelAdmin):
     resource_class = SectionResource
