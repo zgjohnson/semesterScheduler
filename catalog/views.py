@@ -15,13 +15,17 @@ class MyRegistrationView(RegistrationView):
         data = form.cleaned_data    # Cleans the forms data.
 
         if data['access_requested'] == 'A':  # Checks to see if user Registered as an Admin
-            user.is_staff = True    # Sets the users is_staff field to true and allows the user admin privileges.
-            staff_group = Group.objects.get(name='Staff')     # Creates a QuerySet containing the group objects named Staff.
-            staff_group.user_set.add(user)  # Adds the user to the Staff group so they can manage the database.
+            admin_awaiting_approval = Group.objects.get(name='Admin_Awaiting_Approval')
+            admin_awaiting_approval.user_set.add(user)
+            # user.is_staff = True    # Sets the users is_staff field to true and allows the user admin privileges.
+            # staff_group = Group.objects.get(name='Staff')     # Creates a QuerySet containing the group objects named Staff.
+            # staff_group.user_set.add(user)  # Adds the user to the Staff group so they can manage the database.
 
         elif data['access_requested'] == 'R':   # Check to see if user Registered as a Root user.
-            user.is_staff = True    # Sets the users is_staff field to true and allows the user admin privileges.
-            user.is_superuser = True    # Sets the users is_superuser field to true and allows the user root privileges.
+            # user.is_staff = True    # Sets the users is_staff field to true and allows the user admin privileges.
+            # user.is_superuser = True    # Sets the users is_superuser field to true and allows the user root privileges.
+            root_awaiting_approval = Group.objects.get(name='Root_Awaiting_Approval')
+            root_awaiting_approval.user_set.add(user)
 
         user.save()  # Saved the user instance.
 
