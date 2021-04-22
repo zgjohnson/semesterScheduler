@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django import forms
 from import_export import resources
 from import_export.admin import ImportExportModelAdmin
-from .models import Course
+from .models import Course, Section
 
 
 class PeriodAdminForm(forms.ModelForm):
@@ -25,19 +25,27 @@ class PeriodAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.save()
 
-
+#CSV Import for Course
 class CourseResource(resources.ModelResource):
     class Meta:
         model = Course
-        exclude = ('id',)
 
 
 class CourseAdmin(ImportExportModelAdmin):
     resource_class = CourseResource
 
+#CSV Import for Section
+
+class SectionResource(resources.ModelResource):
+    class Meta:
+        model = Section
+
+class SectionAdmin(ImportExportModelAdmin):
+    resource_class = SectionResource
+
 
 admin.site.register(models.Course, CourseAdmin)
-admin.site.register(models.Section)
+admin.site.register(models.Section, SectionAdmin)
 admin.site.register(models.Period, PeriodAdmin)
 admin.site.register(models.DesignatedCourses)
 admin.site.register(models.ReservedTime)
