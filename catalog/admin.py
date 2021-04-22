@@ -43,6 +43,7 @@ admin.site.register(models.DesignatedCourses)
 admin.site.register(models.ReservedTime)
 admin.site.register(models.ScheduleOption)
 admin.site.register(models.ScheduledCourses)
+admin.site.register(models.Schedule)
 
 # create PeriodAdmin class
 # clean method validates it is divisible by 5
