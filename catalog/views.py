@@ -26,7 +26,7 @@ class MyRegistrationView(RegistrationView):
         user.save()  # Saved the user instance.
 
 
-@login_required # Requires user to be logged in
+@login_required  # Requires user to be logged in
 # Defines the Catalog Home Page
 def homePage(request):
     courses = Course.objects.all()  # Creates a QuerySet of all the Courses in the Catalog
@@ -136,6 +136,9 @@ def scheduleGenerator(request):
     periods = Period.objects.all()  # QuerySet to get all period objects
     possible_periods = []  # Empty list used to store possible periods
     possible_sections = []  # Empty list used to store possible sections
+    permutations_dicts = []  # List used to store the possible section/period permutations
+    items_to_remove = set()  # Set of items to remove from the list of possible section/period permutations. Used set here because items will not repeat.
+    schedules = []
 
     for period in periods:  # Adds every period to the list
         possible_periods.append(period)
@@ -144,21 +147,23 @@ def scheduleGenerator(request):
     for reservedTime in rt:  # Loops over every rt related to the user
         for period in periods:  # Loops over every period object to compare to every rt object
             if reservedTime.reserved_Day in period.meeting_day:  # If the reserved time is on the same day as the period check to see if the times cross over
-                if reservedTime.start_Time <= period.start_Time and period.end_Time <= reservedTime.end_Time:  # If period is between rt start and end time
+                # If period is between rt start and end time
+                if reservedTime.start_Time <= period.start_Time and period.end_Time <= reservedTime.end_Time:
                     try:
                         possible_periods.remove(period)  # remove period from list
-                    except ValueError:
+                    except ValueError:  # If the period has already been removed skip it.
                         continue
-                elif period.start_Time <= reservedTime.start_Time and reservedTime.end_Time <= period.end_Time:  # If rt is between period start and end time
+                # If rt is between period start and end time
+                elif period.start_Time <= reservedTime.start_Time and reservedTime.end_Time <= period.end_Time:
                     try:
                         possible_periods.remove(period)  # remove period from list
-                    except ValueError:
+                    except ValueError:  # If the period has already been removed skip it.
                         continue
-                    # If The period start time or period end time is between rt start and end time
+                # If The period start time or period end time is between rt start and end time
                 elif reservedTime.start_Time <= period.start_Time <= reservedTime.end_Time or reservedTime.start_Time <= period.end_Time <= reservedTime.end_Time:
                     try:
                         possible_periods.remove(period)  # remove period from list
-                    except ValueError:
+                    except ValueError:  # If the period has already been removed skip it.
                         continue
 
     if request.method == 'GET':
@@ -167,63 +172,71 @@ def scheduleGenerator(request):
                       {'reservedTimes': rt, 'possibleCourses': pc, 'schedule_Options': schedule_options})
 
     else:
-        ScheduleOption.objects.all().delete()  # Clears previous Schedule options
+        ScheduleOption.objects.all().delete()  # Clears previous Schedule options from the screen
         form = DesignatedCoursesForm(request.POST)  # Retrieves DC from form chosen by user
-        course_sections = {}  # Empty dictionary to hold
-        course_count = 0
+        course_sections = {}  # Empty dictionary to hold Section id as key and a list of period ids associated with that section as the value
+        course_count = 0    # Tracks the number of courses the user has chosen.
 
-        if form.is_valid():
-            for course in form.cleaned_data['choices']:
-                course_count += 1
-                sections = Section.objects.filter(course=course)
-                for section in sections:
-                    possible_sections.append(section)
+        if form.is_valid():  # Checks if the form data is valid
+            for course in form.cleaned_data['choices']:  # Loops through the courses chosen
+                course_count += 1  # Counts the Courses
+                sections = Section.objects.filter(course=course)  # QuerySet to find all the section objects related to that course
+                for section in sections:    # Loop through all the sections
+                    possible_sections.append(section)   # Add those sections to the list
 
-        if course_count == 0:
-            error = "Please choose from the Possible Courses"
+        if course_count == 0:   # If the user did not choose any courses
+            error = "Please choose from the Possible Courses"   # Error message to be displayed
             return render(request, 'scheduleGenerator.html',
                           {'reservedTimes:': rt, 'possibleCourses': pc, 'error': error})
 
+        # Loops through each section and period in the two lists
         for section in possible_sections:
             for period in possible_periods:
-                if period in section.periods.all():
+                if period in section.periods.all():  # If that possible period is in the possible section
+                    # Finds the dictionary value corresponding to the section.id key.
+                    # If there is not a key/value pair it creates it adds the period.id to the list
+                    # If there is a k/v pair it just adds the period.id to the list.
                     course_sections[section.id] = course_sections.get(section.id, []) + [period.id]
 
-        # all_courses = sorted(course_sections)
-        # combinations = it.product(*(course_sections[Name] for Name in all_courses))
-        # print(list(combinations))
-        # keys, values = zip(*course_sections.items())
-        # permutations_dicts = [dict(zip(keys, v)) for v in product(*values)]
-        # print(permutations_dicts)
-
-        permutations_dicts = []
-
+        # Finds all the combinations of the lists passed in.
         def all_combinations(lst):
+            # Chain links together the keys passed in through the dictionary.
+            # Combinations gets all the possible key combinations
             return chain(*[combinations(lst, i + 1) for i in range(len(lst))])
 
-        for comb in all_combinations(course_sections):
-            for prod in product(*(course_sections[k] for k in comb)):
-                use = dict(zip(comb, prod))
+        # Loops over all combinations of keys in the dictionary
+        for comb in all_combinations(course_sections):  # comb is a list of section id
+            # Loops over all combinations of values corresponding to the keys in comb list
+            for prod in product(*(course_sections[k] for k in comb)):  # prod is a list of period id corresponding to section id
+                use = dict(zip(comb, prod))  # Creates a dictionary relating the section id(s) to the period id(s)
+                # Checks to see if the length of that dictionary is equal to the number of classes chosen by the user
                 if len(use) == course_count:
+                    # If it is it adds it to the list of dictionaries
+                    # We only want the possible schedules that contain all the courses chosen by the user
                     permutations_dicts.append(use)
 
-
-        items_to_remove = set()
-        for i in range(len(permutations_dicts)):
-            temp_dictionary = permutations_dicts[i]
-            temp_dictionary2 = permutations_dicts[i]
+        # Used to compare dictionaries in the list and manipulate them
+        for i in range(len(permutations_dicts)):  # i is the location in the list of dictionaries
+            # We need to compare every k/v pair in each dictionary to find the repeated courses and period overlaps
+            temp_dictionary = permutations_dicts[i]  # First temporary dictionary used for comparison to keep the original data safe
+            temp_dictionary2 = permutations_dicts[i]  # Second temporary dictionary used for comparison to keep the original data safe
+            # Looping over each key/value pair in both temporary dictionaries for comparison
             for k, v in temp_dictionary.items():
                 for k2, v2 in temp_dictionary2.items():
-                    if k == k2:
+                    if k == k2:  # We don't want to compare the section.ids that match because then all items will be removed from the
                         continue
                     else:
+                        # Gets the actual objects associated with the ids
                         per1 = Period.objects.get(id=v)
                         per2 = Period.objects.get(id=v2)
                         sec1 = Section.objects.get(id=k)
                         sec2 = Section.objects.get(id=k2)
+                        # Checks to see if there are sections with the same corresponding Course
                         if sec1.course.course_Title == sec2.course.course_Title:
-                            items_to_remove.add(i)
+                            items_to_remove.add(i)  # Adds the location of the dictionary to the set
+                        # Checks to to see if the periods meet on the same day by comparing strings
                         if per1.meeting_day in per2.meeting_day or per2.meeting_day in per1.meeting_day:
+                            # If they are on the same day this checks to see if times overlap
                             if per1.start_Time <= per2.start_Time and per2.end_Time <= per1.end_Time:
                                 items_to_remove.add(i)
                                 break
@@ -233,7 +246,8 @@ def scheduleGenerator(request):
                             elif per1.start_Time <= per2.start_Time <= per1.end_Time or per1.start_Time <= per2.end_Time <= per1.end_Time:
                                 items_to_remove.add(i)
                                 break
-        schedules = []
+
+        # Adds the items in the dictionary of permutations to the schedule list if that 
         for i in range(len(permutations_dicts)):
             if i not in items_to_remove:
                 schedules.append(permutations_dicts[i])
