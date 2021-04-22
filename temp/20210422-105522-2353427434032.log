@@ -1,14 +1,14 @@
 Content-Type: multipart/alternative;
- boundary="===============2236735068591462803=="
+ boundary="===============9102640006282981586=="
 MIME-Version: 1.0
 Subject: Account activation on localhost:8000
 From: webmaster@localhost
-To: bob@gmail.com
-Date: Wed, 21 Apr 2021 17:49:18 -0000
+To: boby@gmail.com
+Date: Thu, 22 Apr 2021 15:55:22 -0000
 Message-ID: 
- <161902735809.29572.15509007324080502459@DESKTOP-0H8RH62.attlocal.net>
+ <161910692239.31340.11827759169044464944@DESKTOP-0H8RH62.conwaycorp.net>
 
---===============2236735068591462803==
+--===============9102640006282981586==
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -24,7 +24,7 @@ To activate this account, please click the following link within the next
 7 days:
 
 
-http://localhost:8000/accounts/activate/792bc34c0ca0e6769857233db73916e4772ef0594afd2d55080b82421eb91766/
+http://localhost:8000/accounts/activate/3e9e6923eb862b32c628408aa57871c3d57538b24a8e003c0ba12937d8662ee0/
 
 
 Sincerely,
@@ -34,7 +34,7 @@ localhost:8000 Management
 
 
 
---===============2236735068591462803==
+--===============9102640006282981586==
 Content-Type: text/html; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
@@ -63,8 +63,8 @@ Content-Transfer-Encoding: 7bit
 </p>
 
 <p>
-    <a href="http://localhost:8000/accounts/activate/792bc34c0ca0e6769857233db73916e4772ef0594afd2d55080b82421eb91766/">
-        localhost:8000/accounts/activate/792bc34c0ca0e6769857233db73916e4772ef0594afd2d55080b82421eb91766/
+    <a href="http://localhost:8000/accounts/activate/3e9e6923eb862b32c628408aa57871c3d57538b24a8e003c0ba12937d8662ee0/">
+        localhost:8000/accounts/activate/3e9e6923eb862b32c628408aa57871c3d57538b24a8e003c0ba12937d8662ee0/
     </a>
 </p>
 <p>
@@ -80,6 +80,6 @@ Content-Transfer-Encoding: 7bit
 
 
 
---===============2236735068591462803==--
+--===============9102640006282981586==--
 
 -------------------------------------------------------------------------------

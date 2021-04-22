@@ -22,7 +22,7 @@ from catalog import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/register/', MyRegistrationView.as_view()),
-    path('accounts/', include('registration.backends.default.urls')),
+    path('accounts/', include('registration.backends.admin_approval.urls')),
 
     # Catalog pages
     path('', views.homePage, name='homePage'),

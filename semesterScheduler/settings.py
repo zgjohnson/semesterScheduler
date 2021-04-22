@@ -127,8 +127,8 @@ SITE_ID = 1
 LOGIN_URL = '/accounts/login'
 LOGIN_REDIRECT_URL = '/'
 ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_ADMINS = [('capstone', 'zgjohnson@ualr.edu')]
 
-# TIME_INPUT_FORMATS = ('%I:%M %p',)
 REGISTRATION_AUTO_LOGIN = False
 REGISTRATION_FORM = 'catalog.forms.MyRegistrationForm'
 
