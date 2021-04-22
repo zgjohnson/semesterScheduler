@@ -247,7 +247,7 @@ def scheduleGenerator(request):
                                 items_to_remove.add(i)
                                 break
 
-        # Adds the items in the dictionary of permutations to the schedule list if that 
+        # Adds the items in the dictionary of permutations to the schedule list if that
         for i in range(len(permutations_dicts)):
             if i not in items_to_remove:
                 schedules.append(permutations_dicts[i])
