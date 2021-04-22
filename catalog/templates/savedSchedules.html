@@ -2,7 +2,24 @@
 
 {% block content %}
     <h1>Saved Schedules for {{ user.username }}</h1>
-
+<ul>
+    <table style="width:75%">
+        <colgroup>
+            <col span="1" style="width: 20%;">
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 10%;">
+            <col span="1" style="width: 20%;">
+        </colgroup>
+        <tr>
+            <th>Course Title</th>
+            <th>Section</th>
+            <th>Instructor</th>
+            <th>Meeting Day(s)</th>
+            <th>Meeting Time(s)</th>
+        </tr>
+    </table>
+</ul>
     {% if saved_schedules is None %}
         There are no saved schedules for {{ user.username }}
     {% else %}
@@ -10,16 +27,26 @@
 
         {% for schedule in saved_schedules %}
             <li>
-                <ul>
 
                     {% for course in schedule.savedScheduledCourse.all %}
 
-                        <li>
-                            {{ course.section.course.course_Title }} Section: {{ course.section.section_ID }} Instructor: {{ course.section.instructor }} Period: {{ course.period.meeting_day }} {{ course.period.start_Time }} - {{ course.period.end_Time }}
-                        </li>
-
+                        <table style="width:75%">
+                    <colgroup>
+                        <col span="1" style="width: 20%;">
+                        <col span="1" style="width: 10%;">
+                        <col span="1" style="width: 10%;">
+                        <col span="1" style="width: 10%;">
+                        <col span="1" style="width: 20%;">
+                    </colgroup>
+                    <tr>
+                        <td>{{ course.section.course.course_Title }}</td>
+                        <td>{{ course.section.section_ID }}</td>
+                        <td>{{ course.section.instructor }}</td>
+                        <td>{{ course.period.meeting_day }}</td>
+                        <td>{{ course.period.start_Time }} - {{ course.period.end_Time }}</td>
+                    </tr>
+                </table>
                     {% endfor %}
-                </ul>
             </li>
             <form action="{% url 'delSchedules' schedule.id %}" method="POST">{% csrf_token %}<input type="submit" value="Delete"></form>
         {% endfor %}
