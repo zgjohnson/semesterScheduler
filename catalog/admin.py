@@ -2,7 +2,8 @@ from django.contrib import admin
 from catalog import models
 from django.core.exceptions import ValidationError
 from django import forms
-from import_export import resources
+from import_export import resources, fields
+from import_export.widgets import ForeignKeyWidget
 from import_export.admin import ImportExportModelAdmin
 from .models import Course, Section, Period
 
@@ -39,9 +40,14 @@ class CourseAdmin(ImportExportModelAdmin):
 # CSV Import for Section
 
 class SectionResource(resources.ModelResource):
+    course = fields.Field(
+        column_name='course',
+        attribute='course',
+        widget=ForeignKeyWidget(Course, 'id')
+    )
     class Meta:
         model = Section
-
+        fields = ('id', 'section_ID', 'instructor', 'course', 'periods')
 
 class SectionAdmin(ImportExportModelAdmin):
     resource_class = SectionResource
