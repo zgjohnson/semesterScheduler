@@ -21,8 +21,8 @@
     <h3>Add a new Reserved Time</h3>
     <form action="{% url 'reservedTimes' %}" method="POST">
         {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Create</button>
+        {{ form.as_p}}
+        <button type="submit">Create</button>
     </form>
 
 
