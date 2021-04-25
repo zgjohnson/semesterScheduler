@@ -1,37 +1,47 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="row">
+    <div class="col-sm-6">
+        <h4>Please choose the Courses you would like to add to your Possible Courses list:</h4>
+         <form action="{% url 'designatedCourses' %}" method="POST">
 
-    Please choose the Courses you would like to add to your Possible Courses list.
-
-    <form action="{% url 'designatedCourses' %}" method="POST">
         {% csrf_token %}
         <ul>
+
             {% for course in courses %}
-                <li>
+
+                <h5>
                     <input id="" type="checkbox" value="{{ course.id }}" name="choices">
                     {{ course.department_ID }}
                     {{ course.course_Number }}
                     {{ course.course_Title }}
-                </li>
+                </h5>
+
             {% endfor %}
         </ul>
-             <input type="submit" value="Add to Possible Courses">
+            <h7></h7> <input type="submit" value="Add to Possible Courses">
+            <h2></h2>
+
     </form>
+    </div>
+    <br>
+    <br>
+    <div class="col-sm-6">
+        <h4>Possible Course List for {{ user.username }}:</h4>
 
-    <br><br>
+        {% for dc in designatedCourses %}
 
-    Possible course list for {{ user.username }}
-
-    {% for dc in designatedCourses %}
-        {% for course in dc.designated_courses.all %}
-            <li>
+            {% for course in dc.designated_courses.all %}
+            <h5>
                 {{ course.department_ID }}
                 {{ course.course_Number }}
                 {{ course.course_Title }}
                 <form action="{% url 'delDesignatedCourse' course.id %}" method="POST">{% csrf_token %}<input type="submit" value="Delete"></form>
-            </li>
+            </h5>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
+    </div>
+</div>
 
 {% endblock %}
