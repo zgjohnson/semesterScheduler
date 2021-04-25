@@ -65,7 +65,7 @@
              <input type="submit" value="Generate Schedule">
     </form>
 
-    Schedule Options
+    <h3>Schedule Options</h3>
     <ul>
 <ul>
     <table style="width:75%">
@@ -86,7 +86,6 @@
     </table>
 </ul>
         {% for schedule in schedule_Options %}
-            <li>
                 <ul>
                     {% for course in schedule.scheduled_Courses.all %}
                         <table style="width:75%">
@@ -107,9 +106,8 @@
                 </table>
 
                     {% endfor %}
-                </ul>
-            </li>
             <form action="{% url 'saveSchedule' schedule.id %}" method="POST">{% csrf_token %}<input type="submit" value="Save"></form>
+                        </ul>
         {% endfor %}
 
     </ul>

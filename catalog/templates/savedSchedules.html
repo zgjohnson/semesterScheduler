@@ -3,7 +3,7 @@
 {% block content %}
 <style>
     footer{
-    position: absolute;
+    position: relative;
     }
      th, td {
     padding: 8px;
@@ -38,7 +38,6 @@
     <ul>
 
         {% for schedule in saved_schedules %}
-            <li>
                     {% for course in schedule.savedScheduledCourse.all %}
                         <table style="width:75%">
                     <colgroup>
@@ -57,7 +56,6 @@
                     </tr>
                 </table>
                     {% endfor %}
-            </li>
             <form action="{% url 'delSchedules' schedule.id %}" method="POST">{% csrf_token %}<input type="submit" value="Delete"></form>
         {% endfor %}
 
