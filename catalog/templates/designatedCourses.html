@@ -7,19 +7,33 @@
          <form action="{% url 'designatedCourses' %}" method="POST">
 
         {% csrf_token %}
-        <ul>
-
+              <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Add</th>
+                    <th>Course ID</th>
+                    <th>Course Number</th>
+                    <th>Course Title</th>
+                 </tr>
+                 </thead>
+        <!--<ul>-->
             {% for course in courses %}
 
                 <h5>
-                    <input id="" type="checkbox" value="{{ course.id }}" name="choices">
-                    {{ course.department_ID }}
-                    {{ course.course_Number }}
-                    {{ course.course_Title }}
+                    <!--<input id="" type="checkbox" value="{{ course.id }}" name="choices">-->
+                    <tbody>
+                    <tr>
+                        <td><input id="" type="checkbox" value="{{ course.id }}" name="choices"></td>
+                        <td>{{ course.department_ID }}</td>
+                        <td>{{ course.course_Number }}</td>
+                        <td>{{ course.course_Title }}</td>
+                    </tr>
                 </h5>
-
+ <!--</ul>-->
             {% endfor %}
-        </ul>
+            </tbody>
+  </table>
+
             <h7></h7> <input type="submit" value="Add to Possible Courses">
             <h2></h2>
 
@@ -30,17 +44,33 @@
     <div class="col-sm-6">
         <h4>Possible Course List for {{ user.username }}:</h4>
 
+        <table class="table table-hover">
+                <thead>
+                    <tr>
+
+                    <th>Course ID</th>
+                    <th>Course Number</th>
+                    <th>Course Title</th>
+                        <th>Delete</th>
+                 </tr>
+                 </thead>
+
         {% for dc in designatedCourses %}
 
             {% for course in dc.designated_courses.all %}
             <h5>
-                {{ course.department_ID }}
-                {{ course.course_Number }}
-                {{ course.course_Title }}
-                <form action="{% url 'delDesignatedCourse' course.id %}" method="POST">{% csrf_token %}<input type="submit" value="Delete"></form>
+                <tbody>
+                    <tr>
+                        <td>{{ course.department_ID }}</td>
+                        <td>{{ course.course_Number }}</td>
+                        <td>{{ course.course_Title }}</td>
+                        <td><form action="{% url 'delDesignatedCourse' course.id %}" method="POST">{% csrf_token %}<input type="submit" value="Delete"></form></td>
+                    </tr>
             </h5>
             {% endfor %}
         {% endfor %}
+             </tbody>
+  </table>
     </div>
 </div>
 
