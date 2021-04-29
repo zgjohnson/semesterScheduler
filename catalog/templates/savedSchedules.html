@@ -13,7 +13,7 @@
 
     tr:hover {background-color:#f5f5f5;}
     </style>
-    <h1>Saved Schedules for {{ user.username }}</h1>
+    <h1 style="padding-bottom: 40px">Saved Schedules for {{ user.username }}</h1>
 <ul>
     <table style="width:75%">
         <colgroup>
@@ -56,7 +56,7 @@
                     </tr>
                 </table>
                     {% endfor %}
-            <form action="{% url 'delSchedules' schedule.id %}" method="POST">{% csrf_token %}<input type="submit" value="Delete"></form>
+            <form style="padding-top: 10px; padding bottom:padding-bottom: 50px;" action="{% url 'delSchedules' schedule.id %}" method="POST">{% csrf_token %}<input type="submit" value="Delete"></form>
         {% endfor %}
 
     </ul>

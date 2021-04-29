@@ -5,24 +5,21 @@
         <meta charset="utf-8"/>
         <meta name="description" content=""/>
         <meta name="author" content=""/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!--this line should be making it responsive to different screen sizes-->
-        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> icons-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-       <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
         {% load static %}
-        <link rel="stylesheet" href="{% static "templates/base.css" %}">
+        <!--<link rel="stylesheet" href="{% static "templates/base.css" %}">-->
         <link rel="icon" type="image/png" href="{% static "catalog/wu2.png" %}">
         <style>
 
         h2{
-        padding-bottom: 50px;
+        padding-bottom: 20px;
         }
 
         h4{
-        padding-top: 50px;
+        padding-top: 30px;
         padding-bottom: 30px;
-        padding-left: 70px;
         width: 100%;
         }
 
@@ -73,12 +70,12 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <!--<img src="{% static 'catalog/WULogo.jpg' %}">-->
+
  <header>
     <h1><img src="{% static 'catalog/wu2.png' %}">Wossamotta University<img src="{% static 'catalog/wu2.png' %}"></h1>
  </header>
 
-   <nav class="navbar navbar-inverse navbar-static-top"><!-- <nav class="navbar navbar-light" style="background-color: #ffc14d;">-->
+   <nav class="navbar navbar-inverse navbar-static-top">
   <div class="container-fluid">
     <div class="navbar-header">
         <a class="navbar-brand" style="pointer-events: none;">Schedule Planner</a>
@@ -105,28 +102,7 @@
         {% endif %}
       </li>
     </ul>
-    <!--<ul class="nav navbar-nav navbar-right">
-        <li><a href="#"><span class="glyphicon glyphicon-user"></span>Sign Up</a></li> -->
-        <!--<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-log-in"></span>Account</a>
-      <ul class="dropdown-menu">
-         <li><a href="{% url 'auth_logout' %}">Logout</a></li>
-      </ul>
-      </li>
-          <li><form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button></li>
-   </form>
-    </ul>-->
-     <form class="navbar-form navbar-right" action="/action_page.php">
-  <div class="input-group">
-    <input type="text" class="form-control" placeholder="Search">
-    <div class="input-group-btn">
-      <button class="btn btn-default" type="submit">
-        <i class="glyphicon glyphicon-search"></i>
-      </button>
-    </div>
-  </div>
-</form>
+
    {% elif user.is_authenticated == False %}
 
        <ul class="nav navbar-nav navbar-right">
@@ -137,13 +113,6 @@
    {% endif %}
   </div>
 </nav>
-  <!--<h2>Welcome</h2>-->
-  <!--{% if user.is_authenticated %}
-   <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-   </form>
-  {% endif %}-->
 
     {% block content %}{% endblock %}
 

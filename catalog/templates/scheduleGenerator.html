@@ -36,40 +36,56 @@
     </ul>
 
     <h4>{{ error }}</h4>
-
+<div class="row">
+    <div class="col-sm-6">
     {% if possibleCourses.count == 0 %}
         There are no Possible Courses for {{ user.username }}
     {% elif possibleCourses == None %}
         There are no Possible Courses for {{ user.username }}
     {% else %}
-        Possible Courses for {{ user.username }}
+<h2>Possible Courses for {{ user.username }}</h2>
     {% endif %}
 
     <form action="{% url 'scheduleGenerator' %}" method="POST">
 
         {% csrf_token %}
+        <table class="table table-hover">
+                <thead>
+                <tr>
+                        <th>Select</th>
+                    <th>Course ID</th>
+                    <th>Course Number</th>
+                    <th>Course Title</th>
+                 </tr>
+                 </thead>
         <ul>
 
             {% for course in possibleCourses %}
+            <tbody>
+                    <tr>
 
                 <li style="list-style-type: none;">
-                    <input id="" type="checkbox" value="{{ course.id }}" name="choices">
-                    {{ course.department_ID }}
-                    {{ course.course_Number }}
-                    {{ course.course_Title }}
+                    <td><input id="" type="checkbox" value="{{ course.id }}" name="choices"></td>
+                    <td>{{ course.department_ID }}</td>
+                    <td>{{ course.course_Number }}</td>
+                    <td>{{ course.course_Title }}</td>
                 </li>
+                    </tr>
 
             {% endfor %}
 
 
         </ul>
+        </tbody>
+  </table>
              <input type="submit" value="Generate Schedule">
     </form>
-
-    <h3>Schedule Options</h3>
+    </div>
+    <div class="col-sm-6">
+     <h2 style="padding-left: 80px; padding-top: 5px; padding-bottom: 13px;">Schedule Options</h2>
     <ul>
 <ul>
-    <table style="width:75%">
+    <table style="width: 100%">
         <colgroup>
             <col span="1" style="width: 20%;">
             <col span="1" style="width: 10%;">
@@ -81,7 +97,7 @@
             <th>Course Title</th>
             <th>Section</th>
             <th>Instructor</th>
-            <th>Meeting Day(s)</th>
+            <th>Day(s)</th>
             <th>Meeting Time(s)</th>
         </tr>
     </table>
@@ -89,7 +105,7 @@
         {% for schedule in schedule_Options %}
                 <ul>
                     {% for course in schedule.scheduled_Courses.all %}
-                        <table style="width:75%">
+                        <table style="width: 100%">
                     <colgroup>
                         <col span="1" style="width: 20%;">
                         <col span="1" style="width: 10%;">
@@ -112,5 +128,6 @@
         {% endfor %}
 
     </ul>
-
+  </div>
+</div>
 {% endblock %}
