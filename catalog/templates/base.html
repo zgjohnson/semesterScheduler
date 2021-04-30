@@ -9,128 +9,132 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         {% load static %}
-        <!--<link rel="stylesheet" href="{% static "templates/base.css" %}">-->
+
         <link rel="icon" type="image/png" href="{% static "catalog/wu2.png" %}">
         <style>
+            h2{
+                padding-bottom: 20px;
+            }
 
-        h2{
-        padding-bottom: 20px;
-        }
+            h4{
+                padding-top: 30px;
+                padding-bottom: 30px;
+                width: 100%;
+            }
 
-        h4{
-        padding-top: 30px;
-        padding-bottom: 30px;
-        width: 100%;
-        }
+            h6{
+                font-size: 15px;
+            }
 
-        h6{
-        font-size: 15px;
-        }
+            h7{
+                padding-left: 120px;
+            }
 
-       h7{
-        padding-left: 120px;
-        }
+            page-container {
+                position: relative;
+                min-height: 100vh;
+            }
 
-        page-container {
-        position: relative;
-        min-height: 100vh;
-        }
+            footer {
+                background-color: darkgreen;
+                color: #ffc14d;
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                margin-bottom: 0px;
+            }
 
-        footer {
-        background-color: darkgreen;
-        color: #ffc14d;
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        }
+            body {
+                background-color: white;
 
-        body {
-        background-color: white;
-        padding-bottom:50;
-        }
+            }
 
-        .navbar {
-         margin-bottom: 0;
-         border-radius: 0;
-         }
+            .navbar {
+                margin-bottom: 0;
+                border-radius: 0;
+             }
 
-        header{
-         padding-top: 1px;
-         padding-bottom: 8px;
-         font-family: "Times New Roman", Times, serif;
-         background-color: darkgreen;
-         color: #ffc14d;
-         width: 100%;
-         text-align: center;
-         text-shadow: 5px 5px 8px black;
-        }
+            header{
+                padding-top: 1px;
+                padding-bottom: 8px;
+                font-family: "Times New Roman", Times, serif;
+                background-color: darkgreen;
+                color: #ffc14d;
+                width: 100%;
+                text-align: center;
+                text-shadow: 5px 5px 8px black;
+            }
         </style>
     </head>
-<body>
+    <body>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
- <header>
-    <h1><img src="{% static 'catalog/wu2.png' %}">Wossamotta University<img src="{% static 'catalog/wu2.png' %}"></h1>
- </header>
+     <header>
+        <h1><img src="{% static 'catalog/wu2.png' %}">Wossamotta University<img src="{% static 'catalog/wu2.png' %}"></h1>
+     </header>
 
-   <nav class="navbar navbar-inverse navbar-static-top">
-  <div class="container-fluid">
-    <div class="navbar-header">
-        <a class="navbar-brand" style="pointer-events: none;">Schedule Planner</a>
-    </div>
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" style="pointer-events: none;">Schedule Planner</a>
+            </div>
+            {% if user.is_authenticated %}
 
-   {% if user.is_authenticated %}
-    <ul class="nav navbar-nav">
-      <li><a href="{% url 'homePage' %}">Catalog</a></li>
-      <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Scheduler<span class="caret"></span></a>
-        <ul class="dropdown-menu">
-          <li><a href="{% url 'designatedCourses' %}">Possible Courses</a></li>
-          <li><a href="{% url 'reservedTimes' %}">Reserved Times</a></li>
-          <li><a href="{% url 'scheduleGenerator' %}">Schedule Generator</a></li>
-          <li><a href="{% url 'savedSchedules' %}">Saved Schedules</a></li>
-        </ul>
-      </li>
-        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-log-in"></span> Account</a>
-      <ul class="dropdown-menu">
-         <li><a href="{% url 'auth_logout' %}">Logout</a></li>
-      </ul>
-        {% if user.is_staff or user.is_superuser %}
-          <li><a href="{% url 'admin:index' %}">Admin</a></li>
-        {% endif %}
-      </li>
-    </ul>
+                <ul class="nav navbar-nav">
+                    <li><a href="{% url 'homePage' %}">Catalog</a></li>
 
-   {% elif user.is_authenticated == False %}
+                    <li class="dropdown">
+                       <a class="dropdown-toggle" data-toggle="dropdown" href="#">Scheduler<span class="caret"></span></a>
+                       <ul class="dropdown-menu">
+                           <li><a href="{% url 'designatedCourses' %}">Possible Courses</a></li>
+                           <li><a href="{% url 'reservedTimes' %}">Reserved Times</a></li>
+                           <li><a href="{% url 'scheduleGenerator' %}">Schedule Generator</a></li>
+                           <li><a href="{% url 'savedSchedules' %}">Saved Schedules</a></li>
+                       </ul>
+                   </li>
 
-       <ul class="nav navbar-nav navbar-right">
-        <li><a href="{% url 'registration_register' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-        <li><a href="{% url 'auth_login' %}">Log In</a></li>
-      </ul>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                           <span class="glyphicon glyphicon-log-in"></span> Account
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'auth_logout' %}">Logout</a></li>
+                        </ul>
+                    </li>
+                    {% if user.is_staff or user.is_superuser %}
+                        <li><a href="{% url 'admin:index' %}">Admin</a></li>
+                    {% endif %}
+                </ul>
 
-   {% endif %}
-  </div>
-</nav>
+            {% elif user.is_authenticated == False %}
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{% url 'registration_register' %}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li><a href="{% url 'auth_login' %}">Log In</a></li>
+                </ul>
+            {% endif %}
+        </div>
+    </nav>
 
     {% block content %}{% endblock %}
 
-<footer class="bg-light text-center text-lg-start">
-  <div class="container p-4">
-    <div class="row">
-        <h6 class="text-uppercase">Wossamotta University</h6>
-        <p>
-          We hope that you have found our semester schedule planner helpful. Please contact us if you have any questions.
-        </p>
-        <p>Phone: (501) 867-5309</p>
-        <p>Email: registrar@wu.edu</p>
-    </div>
-   <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
-    © 2021 Copyright  |  Wossamotta University
-   </div>
-  </div>
-</footer>
+
+    <footer class="bg-light text-center text-lg-start">
+        <div class="container p-4">
+            <div class="row">
+                <h6 class="text-uppercase">Wossamotta University</h6>
+                <p>
+                    We hope that you have found our semester schedule planner helpful. Please contact us if you have any questions.
+                </p>
+                <p>Phone: (501) 867-5309</p>
+                <p>Email: registrar@wu.edu</p>
+            </div>
+            <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+                © 2021 Copyright  |  Wossamotta University
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>

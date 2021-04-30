@@ -15,6 +15,7 @@ class MyRegistrationView(RegistrationView):
         data = form.cleaned_data    # Cleans the forms data.
 
         if data['access_requested'] == 'A':  # Checks to see if user Registered as an Admin
+            # Adds the user to the group that is awaiting approval for Admin Privileges
             admin_awaiting_approval = Group.objects.get(name='Admin_Awaiting_Approval')
             admin_awaiting_approval.user_set.add(user)
             # user.is_staff = True    # Sets the users is_staff field to true and allows the user admin privileges.
@@ -22,10 +23,11 @@ class MyRegistrationView(RegistrationView):
             # staff_group.user_set.add(user)  # Adds the user to the Staff group so they can manage the database.
 
         elif data['access_requested'] == 'R':   # Check to see if user Registered as a Root user.
-            # user.is_staff = True    # Sets the users is_staff field to true and allows the user admin privileges.
-            # user.is_superuser = True    # Sets the users is_superuser field to true and allows the user root privileges.
+            # Adds the user to the group that is awaiting approval for Root Privileges
             root_awaiting_approval = Group.objects.get(name='Root_Awaiting_Approval')
             root_awaiting_approval.user_set.add(user)
+            # user.is_staff = True    # Sets the users is_staff field to true and allows the user admin privileges.
+            # user.is_superuser = True    # Sets the users is_superuser field to true and allows the user root privileges.
 
         user.save()  # Saved the user instance.
 
@@ -48,11 +50,6 @@ def viewCourse(request, course_pk):  # Takes in the Request and the pk of the co
     section = Section.objects.all()  # QuerySet of all Section objects.
 
     return render(request, 'viewCourse.html', {'courses': courses, 'sections': section})
-
-
-@login_required  # Requires user to be logged in
-def schedulePage(request):
-    return render(request, 'schedulePage.html')
 
 
 @login_required  # Requires user to be logged in
@@ -191,7 +188,7 @@ def scheduleGenerator(request):
         if course_count == 0:   # If the user did not choose any courses
             error = "Please choose from the Possible Courses"   # Error message to be displayed
             return render(request, 'scheduleGenerator.html',
-                          {'reservedTimes:': rt, 'possibleCourses': pc, 'error': error})
+                          {'reservedTimes:': rt, 'possibleCourses': pc, 'error': error, 'course_count': course_count})
 
         # Loops through each section and period in the two lists
         for section in possible_sections:

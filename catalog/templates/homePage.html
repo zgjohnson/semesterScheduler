@@ -1,51 +1,50 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-    th, td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 2px solid #ddd;
-    }
+    <style>
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 2px solid #ddd;
+        }
 
-    tr:hover {background-color:#f5f5f5;}
+        tr:hover {background-color:#f5f5f5;}
 
-    footer{
-    position: relative;
-    }
-</style>
-        <h1>Catalog</h1>
-        <h4>These are the courses offered by Wossamotta University next semester.</h4>
-                    <table style="width:50%">
-                    <colgroup>
-                        <col span="1" style="width: 20%;">
-                        <col span="1" style="width: 20%;">
-                        <col span="1" style="width: 40%;">
-                    </colgroup>
-                    <tr>
-                        <th>Department ID</th>
-                        <th>Course Number</th>
-                        <th>Course Title</th>
-                    </tr>
-                </table>
-        {% for course in courses %}
-            <a href="{% url 'viewCourse' course.id %}">
-                <table style="width:50%">
-                    <colgroup>
-                        <col span="1" style="width: 20%;">
-                        <col span="1" style="width: 20%;">
-                        <col span="1" style="width: 40%;">
-                    </colgroup>
-                    <tr>
-                        <td>{{ course.department_ID }}</td>
-                        <td>{{ course.course_Number }}</td>
-                        <td>{{ course.course_Title }}</td>
-                    </tr>
-                </table>
-            </a>
-        {% endfor %}
+        footer{
+            position: relative;
+        }
+    </style>
 
-        </ul>
+    <h1>Catalog</h1>
+    <h4>These are the courses offered by Wossamotta University next semester.</h4>
+    <table style="width:50%">
+        <colgroup>
+            <col span="1" style="width: 20%;">
+            <col span="1" style="width: 20%;">
+            <col span="1" style="width: 40%;">
+        </colgroup>
+        <tr>
+            <th>Department ID</th>
+            <th>Course Number</th>
+            <th>Course Title</th>
+        </tr>
+    </table>
+    {% for course in courses %}
+        <a href="{% url 'viewCourse' course.id %}">
+            <table style="width:50%">
+                <colgroup>
+                    <col span="1" style="width: 20%;">
+                    <col span="1" style="width: 20%;">
+                    <col span="1" style="width: 40%;">
+                </colgroup>
+                <tr>
+                    <td>{{ course.department_ID }}</td>
+                    <td>{{ course.course_Number }}</td>
+                    <td>{{ course.course_Title }}</td>
+                </tr>
+            </table>
+        </a>
+    {% endfor %}
 
 {% endblock %}
 

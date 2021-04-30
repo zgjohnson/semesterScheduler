@@ -2,40 +2,70 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-    footer{
-    position: relative;
-    }
-     th, td {
-    padding: 8px;
-    text-align: left;
-    border-bottom: 2px solid #ddd;
-    }
+    <style>
+        footer{
+            position: relative;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 2px solid #ddd;
+        }
 
-    tr:hover {background-color:#f5f5f5;}
+        tr:hover {background-color:#f5f5f5;}
     </style>
-    {% if rt == None %}
-        There are no Reserved Times for {{ user.username }}
+    {% if rt.all == 0 %}
+
+        <h3>There are no Reserved Times for {{ user.username }}</h3>
 
     {% else %}
 
-         Reserved Times for {{ user.username }}
+        <h3>Reserved Times for {{ user.username }}</h3>
 
     {% endif %}
-    <ul>
-        {% for rt in reservedTimes %}
-            <li>
-                {{ rt.description }} {{ rt.reserved_Day }} {{ rt.start_Time }} - {{ rt.end_Time }} <form action="{% url 'delReservedTime' rt.id %}" method="POST">{% csrf_token %}<input type="submit" value="Delete"></form>
-            </li>
-        {% endfor %}
-    </ul>
+
+    <table style="width: 75%">
+        <colgroup>
+            <col span="1" style="width: 15%;">
+            <col span="1" style="width: 15%;">
+            <col span="1" style="width: 15%;">
+            <col span="1" style="width: 15%;">
+            <col span="1" style="width: 15%;">
+        </colgroup>
+        <tr>
+            <th>Description</th>
+            <th>Day</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Delete</th>
+        </tr>
+    </table>
+    {% for rt in reservedTimes %}
+        <table style="width:75%">
+            <colgroup>
+                <col span="1" style="width: 15%;">
+                <col span="1" style="width: 15%;">
+                <col span="1" style="width: 15%;">
+                <col span="1" style="width: 15%;">
+                <col span="1" style="width: 15%;">
+            </colgroup>
+            <tr>
+                <td>{{ rt.description }}</td>
+                <td>{{ rt.reserved_Day }}</td>
+                <td>{{ rt.start_Time }}</td>
+                <td>{{ rt.end_Time }}</td>
+                <td><form action="{% url 'delReservedTime' rt.id %}" method="POST">{% csrf_token %}<input type="submit" value="Delete"></form></td>
+            </tr>
+        </table>
+
+    {% endfor %}
 
     <h3>Add a new Reserved Time</h3>
+
     <form action="{% url 'reservedTimes' %}" method="POST">
         {% csrf_token %}
         {{ form.as_p}}
         <button type="submit">Create</button>
     </form>
-
 
 {% endblock %}

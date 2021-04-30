@@ -1,85 +1,90 @@
 {% extends "base.html" %}
 
 {% block content %}
-<style>
-    footer{
-    position: relative;
-    }
-</style>
-<div class="row">
-    <div class="col-sm-6">
-        <h1>Possible Course List</h1>
-        <h4>Please choose the Courses you would like to add to your Possible Courses list:</h4>
-         <form action="{% url 'designatedCourses' %}" method="POST">
 
-        {% csrf_token %}
-              <table class="table table-hover">
+    <style>
+        footer{
+        position: relative;
+        }
+    </style>
+
+    <div class="row" style="width: 100%">
+        <div class="col-sm-6">
+            <h1>Possible Course List</h1>
+
+            <h4>Please choose the Courses from the Catalog you would like to use to Generate Schedules:</h4>
+
+            <form action="{% url 'designatedCourses' %}" method="POST">
+                {% csrf_token %}
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Add</th>
+                            <th>Course ID</th>
+                            <th>Course Number</th>
+                            <th>Course Title</th>
+                         </tr>
+                    </thead>
+
+                    {% for course in courses %}
+                        <h5>
+                            <tbody style="padding-left: 5px">
+                                <tr>
+                                    <td><input id="" type="checkbox" value="{{ course.id }}" name="choices"></td>
+                                    <td>{{ course.department_ID }}</td>
+                                    <td>{{ course.course_Number }}</td>
+                                    <td>{{ course.course_Title }}</td>
+                                </tr>
+                            </tbody>
+                        </h5>
+                    {% endfor %}
+                </table>
+
+                <input type="submit" value="Add to Possible Courses" style="margin-bottom: 15px">
+            </form>
+        </div>
+
+        <br>
+        <br>
+
+        <div class="col-sm-1"></div>
+
+        <div class="col-sm-4">
+            <h4 style="padding-top: 46px">Possible Course List for {{ user.username }}:</h4>
+
+            <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Add</th>
-                    <th>Course ID</th>
-                    <th>Course Number</th>
-                    <th>Course Title</th>
-                 </tr>
-                 </thead>
-        <!--<ul>-->
-            {% for course in courses %}
-
-                <h5>
-                    <!--<input id="" type="checkbox" value="{{ course.id }}" name="choices">-->
-                    <tbody>
-                    <tr>
-                        <td><input id="" type="checkbox" value="{{ course.id }}" name="choices"></td>
-                        <td>{{ course.department_ID }}</td>
-                        <td>{{ course.course_Number }}</td>
-                        <td>{{ course.course_Title }}</td>
-                    </tr>
-                </h5>
- <!--</ul>-->
-            {% endfor %}
-            </tbody>
-  </table>
-
-            <input type="submit" value="Add to Possible Courses">
-            <h2></h2>
-
-    </form>
-    </div>
-    <br>
-    <br>
-    <div class="col-sm-1">
-    </div>
-    <div class="col-sm-5">
-        <h4 style="padding-top: 46px">Possible Course List for {{ user.username }}:</h4>
-
-        <table class="table table-hover">
-                <thead>
-                    <tr>
-
-                    <th>Course ID</th>
-                    <th>Course Number</th>
-                    <th>Course Title</th>
+                        <th>Course ID</th>
+                        <th>Course Number</th>
+                        <th>Course Title</th>
                         <th>Delete</th>
-                 </tr>
-                 </thead>
-
-        {% for dc in designatedCourses %}
-
-            {% for course in dc.designated_courses.all %}
-            <h5>
-                <tbody>
-                    <tr>
-                        <td>{{ course.department_ID }}</td>
-                        <td>{{ course.course_Number }}</td>
-                        <td>{{ course.course_Title }}</td>
-                        <td><form action="{% url 'delDesignatedCourse' course.id %}" method="POST">{% csrf_token %}<input type="submit" value="Delete"></form></td>
                     </tr>
-            </h5>
-            {% endfor %}
-        {% endfor %}
-             </tbody>
-  </table>
+                </thead>
+
+                {% for dc in designatedCourses %}
+
+                    {% for course in dc.designated_courses.all %}
+                        <h5>
+                            <tbody>
+                                <tr>
+                                    <td>{{ course.department_ID }}</td>
+                                    <td>{{ course.course_Number }}</td>
+                                    <td>{{ course.course_Title }}</td>
+                                    <td>
+                                        <form action="{% url 'delDesignatedCourse' course.id %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="submit" value="Delete">
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </h5>
+                    {% endfor %}
+
+                {% endfor %}
+            </table>
+        </div>
     </div>
-</div>
 
 {% endblock %}

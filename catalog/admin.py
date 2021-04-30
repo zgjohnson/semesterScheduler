@@ -8,23 +8,17 @@ from import_export.admin import ImportExportModelAdmin
 from .models import Course, Section, Period
 
 
+# Modifies the Period Form in the Admin site
 class PeriodAdminForm(forms.ModelForm):
     class Meta:
         model = models.Period
         fields = ['start_Time', 'end_Time', 'meeting_day']
 
     def clean(self):
+        # Checks to see if time input is in increments of 5
         if self.cleaned_data['start_Time'].minute % 5 != 0 or self.cleaned_data['end_Time'].minute % 5 != 0:
             raise ValidationError("Please input a minute in increments of 5")
         return super().clean()
-
-
-class PeriodAdmin(admin.ModelAdmin):
-    form = PeriodAdminForm
-    list_display = ("id", "start_Time", "end_Time", "meeting_day")
-
-    def save_model(self, request, obj, form, change):
-        obj.save()
 
 
 # CSV Import for Course
@@ -45,12 +39,15 @@ class SectionResource(resources.ModelResource):
         attribute='course',
         widget=ForeignKeyWidget(Course, 'id')
     )
+
     class Meta:
         model = Section
         fields = ('id', 'section_ID', 'instructor', 'course', 'periods')
 
+
 class SectionAdmin(ImportExportModelAdmin):
     resource_class = SectionResource
+
 
 # CSV Import for Period
 class PeriodResource(resources.ModelResource):
@@ -60,6 +57,12 @@ class PeriodResource(resources.ModelResource):
 
 class PeriodAdmin(ImportExportModelAdmin):
     resource_class = PeriodResource
+    form = PeriodAdminForm
+    list_display = ("id", "start_Time", "end_Time", "meeting_day")
+
+    def save_model(self, request, obj, form, change):
+        obj.save()
+
 
 admin.site.register(models.Course, CourseAdmin)
 admin.site.register(models.Section, SectionAdmin)
@@ -70,7 +73,3 @@ admin.site.register(models.ScheduleOption)
 admin.site.register(models.ScheduledCourses)
 admin.site.register(models.Schedule)
 
-# create PeriodAdmin class
-# clean method validates it is divisible by 5
-# have message saying enter time in 5 minuet increments
-# save_model function not clean
