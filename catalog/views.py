@@ -119,10 +119,7 @@ def delReservedTime(request, pk):
 def scheduleGenerator(request):
     current_user = request.user  # Sets current user
 
-    try:  # Tries to run a QuerySet to get all the RT objects associated with the user
-        rt = ReservedTime.objects.filter(user=current_user)
-    except ObjectDoesNotExist:  # If object DNE sets rt to none
-        rt = None
+    rt = ReservedTime.objects.filter(user=current_user)
 
     try:  # Tries to run a QuerySet to get all the SO objects associated with the user
         schedule_options = ScheduleOption.objects.filter(user=current_user)
@@ -188,7 +185,7 @@ def scheduleGenerator(request):
         if course_count == 0:   # If the user did not choose any courses
             error = "Please choose from the Possible Courses"   # Error message to be displayed
             return render(request, 'scheduleGenerator.html',
-                          {'reservedTimes:': rt, 'possibleCourses': pc, 'error': error, 'course_count': course_count})
+                          {'reservedTimes': rt, 'possibleCourses': pc, 'error': error, 'course_count': course_count})
 
         # Loops through each section and period in the two lists
         for section in possible_sections:
@@ -311,3 +308,7 @@ def delSchedules(request, pk):
         # Deletes the Schedule object
         schedule.delete()
         return redirect('savedSchedules')
+
+
+def goToPossibleCourse(request):
+    return redirect('designatedCourses')

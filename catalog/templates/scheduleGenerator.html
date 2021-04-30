@@ -10,39 +10,19 @@
 
         tr:hover {background-color:#f5f5f5;}
 
-        footer{position: relative;}
+
     </style>
 
     <h1>Schedule Generator</h1>
 
-    {% if rt.all == 0 %}
+    {% if reservedTimes.count == 0 %}
 
-        <h3>There are no Reserved Times for {{ user.username }}</h3>
+        <h2>There are no Reserved Times for {{ user.username }}</h2>
 
     {% else %}
-
-        <h3>Reserved Times for {{ user.username }}</h3>
-
-    {% endif %}
-
-    <ul>
-         <table style="width: 60%">
-             <colgroup>
-                <col span="1" style="width: 15%;">
-                <col span="1" style="width: 15%;">
-                <col span="1" style="width: 15%;">
-                <col span="1" style="width: 15%;">
-            </colgroup>
-            <tr>
-                <th>Description</th>
-                <th>Day</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-            </tr>
-         </table>
-
-        {% for rt in reservedTimes %}
-            <table style="width:60%">
+        <h2>Reserved Times for {{ user.username }}</h2>
+        <ul>
+            <table style="width: 60%">
                 <colgroup>
                     <col span="1" style="width: 15%;">
                     <col span="1" style="width: 15%;">
@@ -50,27 +30,49 @@
                     <col span="1" style="width: 15%;">
                 </colgroup>
                 <tr>
-                    <td>{{ rt.description }}</td>
-                    <td>{{ rt.reserved_Day }}</td>
-                    <td>{{ rt.start_Time }}</td>
-                    <td>{{ rt.end_Time }}</td>
+                    <th>Description</th>
+                    <th>Day</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
                 </tr>
             </table>
-        {% endfor %}
-    </ul>
 
-    {% if course_count == 0 %}
-        <h4>{{ error }}</h4>
+            {% for rt in reservedTimes %}
+                <table style="width:60%">
+                    <colgroup>
+                        <col span="1" style="width: 15%;">
+                        <col span="1" style="width: 15%;">
+                        <col span="1" style="width: 15%;">
+                        <col span="1" style="width: 15%;">
+                    </colgroup>
+                    <tr>
+                        <td>{{ rt.description }}</td>
+                        <td>{{ rt.reserved_Day }}</td>
+                        <td>{{ rt.start_Time }}</td>
+                        <td>{{ rt.end_Time }}</td>
+                    </tr>
+                </table>
+            {% endfor %}
+        </ul>
     {% endif %}
+    <form action="{% url 'reservedTimes' %}" method="GET">
+        <input type="submit" value="Add A Reserved Time">
+    </form>
 
     <div class="row" style="width: 100%">
         <div class="col-sm-6">
             {% if possibleCourses.count == 0 %}
-                There are no Possible Courses for {{ user.username }}
-            {% elif possibleCourses == None %}
-                There are no Possible Courses for {{ user.username }}
+                <h2>There are no Possible Courses for {{ user.username }}</h2>
+                <h6>Please choose courses from the Catalog</h6>
+                <form action="{% url 'designatedCourses' %}" method="GET">
+                    <input type="submit" value="Back to Possible Course">
+                </form>
             {% else %}
                 <h2>Possible Courses for {{ user.username }}</h2>
+
+
+            {% if course_count == 0 %}
+                <h4>{{ error }}</h4>
             {% endif %}
 
             <form action="{% url 'scheduleGenerator' %}" method="POST">
@@ -102,6 +104,7 @@
                 </table>
                 <input type="submit" value="Generate Schedule" style="margin-bottom: 10px">
             </form>
+        {% endif %}
         </div>
 
         <div class="col-sm-6">
