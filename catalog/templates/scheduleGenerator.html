@@ -12,6 +12,12 @@
 
 
     </style>
+    
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
 
     <h1>Schedule Generator</h1>
 
@@ -72,7 +78,7 @@
 
 
             {% if course_count == 0 %}
-                <h4>{{ error }}</h4>
+                <h4 id="error">{{ error }}</h4>
             {% endif %}
 
             <form action="{% url 'scheduleGenerator' %}" method="POST">
@@ -109,6 +115,9 @@
 
         <div class="col-sm-6">
             <h2 style="padding-left: 80px; padding-top: 5px; padding-bottom: 13px;">Schedule Options</h2>
+            {% if schedule_Options.count == 0 %}
+                <h4 id="error">{{ error }}</h4>
+            {% else %}
             <ul>
                 <ul>
                     <table style="width: 100%">
@@ -158,6 +167,7 @@
                     </ul>
                 {% endfor %}
             </ul>
+            {% endif %}
         </div>
     </div>
 

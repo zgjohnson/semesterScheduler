@@ -132,6 +132,8 @@ ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_AUTO_LOGIN = False
 REGISTRATION_FORM = 'catalog.forms.MyRegistrationForm'
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
 #Email Settingss
 if DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"

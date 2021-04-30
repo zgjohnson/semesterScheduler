@@ -6,6 +6,7 @@ from django.contrib.auth.models import Group
 from .models import Course, DesignatedCourses, ReservedTime, Section, Period, ScheduledCourses, ScheduleOption, Schedule
 from .forms import DesignatedCoursesForm, ReservedTimeForm
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
 
 
 # Custom Registration View that extends the one included in Registration-Redux
@@ -121,10 +122,9 @@ def scheduleGenerator(request):
 
     rt = ReservedTime.objects.filter(user=current_user)
 
-    try:  # Tries to run a QuerySet to get all the SO objects associated with the user
-        schedule_options = ScheduleOption.objects.filter(user=current_user)
-    except ObjectDoesNotExist:  # If object DNE sets schedule_options to none
-        schedule_options = None
+    schedule_options = ScheduleOption.objects.filter(user=current_user)
+
+
 
     try:  # Tries to run a QuerySet to get all the DC objects associated with the user
         pc = DesignatedCourses.objects.get(user=current_user).designated_courses.all()
@@ -165,6 +165,12 @@ def scheduleGenerator(request):
                         continue
 
     if request.method == 'GET':
+
+        if schedule_options.count() == 0:
+            error = "Please click the Generate Schedules button"
+            return render(request, 'scheduleGenerator.html',
+                          {'reservedTimes': rt, 'possibleCourses': pc, 'schedule_Options': schedule_options,
+                           'error': error})
         # Displays users reserved times, possible courses, and schedule options
         return render(request, 'scheduleGenerator.html',
                       {'reservedTimes': rt, 'possibleCourses': pc, 'schedule_Options': schedule_options})
@@ -267,8 +273,13 @@ def scheduleGenerator(request):
         # QuerySet to find the schedule options associated with a user
         schedule_options = ScheduleOption.objects.filter(user=current_user)
 
+        if schedule_options.count() == 0:
+            error = "There are no possible Schedules to be generated. Please choose a different set of Possible Schedules"
+            return render(request, 'scheduleGenerator.html',
+                          {'reservedTimes': rt, 'possibleCourses': pc, 'schedule_Options': schedule_options,
+                           'course_count': course_count, 'error': error})
         return render(request, 'scheduleGenerator.html',
-                      {'reservedTimes': rt, 'possibleCourses': pc, 'schedule_Options': schedule_options})
+                      {'reservedTimes': rt, 'possibleCourses': pc, 'schedule_Options': schedule_options, 'course_count': course_count})
 
 
 @login_required  # Requires user to be logged in
@@ -284,6 +295,7 @@ def saveSchedule(request, pk):
             saved_schedule.savedScheduledCourse.add(course)
         # Saves the saved schedule
         saved_schedule.save()
+        messages.success(request, 'Schedule successfully saved.')
         return redirect('scheduleGenerator')
 
 
@@ -309,6 +321,3 @@ def delSchedules(request, pk):
         schedule.delete()
         return redirect('savedSchedules')
 
-
-def goToPossibleCourse(request):
-    return redirect('designatedCourses')
